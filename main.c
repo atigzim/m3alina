@@ -1,5 +1,30 @@
 #include "cub_3d.h"
 
+void	free_map(char **map)
+{
+	int	i;
+
+	if (!map)
+		return ;
+	i = 0;
+	while (map[i])
+	{
+		free(map[i]);
+		map[i] = NULL;
+		i++;
+	}
+	free(map);
+	map = NULL;
+}
+
+void	exit_map(char **map)
+{
+	write(1, "Error\n", 6);
+	write(1, "map invalid\n", 13);
+	free_map(map);
+	exit(1);
+}
+
 int	len_height(char *path_file)
 {
 	int		fd;
@@ -98,8 +123,8 @@ void parse_cub(char *filename, t_data *data)
     check_dot_ber(filename, data);
     fd = open(filename, O_RDONLY);
 	if (fd == -1)
-		return (NULL);
-    data->map = get_map()
+		return ;
+    // data->map = get_map()
 }
 
 int main(int ac, char *av[])
