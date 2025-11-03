@@ -209,7 +209,7 @@ void define_textures(t_data *data, int fd, int *offset)
 	{
 		if (*offset < 6 && check_textures(line))
 		{
-			*(offset++);
+			(*offset)++;
 			pars_textures(line, data);
 			free(line);
 		}
