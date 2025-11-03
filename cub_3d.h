@@ -44,7 +44,7 @@ void	free_map(char **map);
 void	exit_map(char **map);
 int	    len_height(int fd);
 void	loop_map(char *r_l_line, int fd, char **map, t_data *data);
-char	**get_map(int fd, int len, t_data *data);
+// char	**get_map(int fd, int len, t_data *data);
 void	has_cub_extension(char *path_file, t_data *data);
 void    parse_cub(char *filename, t_data *data);
 

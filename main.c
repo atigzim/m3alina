@@ -135,6 +135,7 @@ char *find_int(char *line)
 				}
 				i++;
 			}
+			printf("{{{%s}}}\n", line);
 			return(line);
 		}
 		line++;
@@ -168,6 +169,7 @@ char *find_path(char *line, char *position)
 	if (ft_strncmp(position, line, 2))
 		line+=2;
 	line = skip_spacess(line);
+	printf(".....%s\n", line);
 	return (line);
 }
 
@@ -181,20 +183,22 @@ void pars_textures(char *line, t_data *data)
 	line = skip_spacess(line);
 	if(check_textures(line))
 	{
-		if(ft_strncmp("NO", line, 2))
+		i++;
+		if(!ft_strncmp("NO", line, 2))
+		{
 			data->textures.north = ft_strdup(find_path(line, "NO"));
-		else if(ft_strncmp("SO", line, 2))
+		}
+		else if(!ft_strncmp("SO", line, 2))
 			data->textures.south = ft_strdup(find_path(line, "SO"));
-		else if(ft_strncmp("WE", line, 2))
+		else if(!ft_strncmp("WE", line, 2))
 			data->textures.west = ft_strdup(find_path(line, "WE"));
-		else if(ft_strncmp("EA", line, 2))
+		else if(!ft_strncmp("EA", line, 2))
 			data->textures.east = ft_strdup(find_path(line, "EA"));
-		else if (ft_strncmp("C", line, 1))
+		else if (!ft_strncmp("C", line, 1))
 			data->ceiling = ft_strdup(find_int(line)); 
-		else if (ft_strncmp("F", line, 1))
+		else if (!ft_strncmp("F", line, 1))
 			data->floor = ft_strdup(find_int(line)); 
 	}
-
 }
 
 void define_textures(t_data *data, int fd, int *offset)
@@ -202,12 +206,11 @@ void define_textures(t_data *data, int fd, int *offset)
 	char *line;
 	int i;
 
-	i= 0;
-	(void)offset;
+	i = 0;
 	line = get_next_line(fd);
 	while (line)
 	{
-		if (*offset < 6 && check_textures(line))
+		if (*offset < 6)
 		{
 			(*offset)++;
 			pars_textures(line, data);
@@ -223,7 +226,6 @@ void parse_cub(char *filename, t_data *data)
 {
     int fd;
 	int offset;
-	(void)offset;
 
 	offset = 0;
     has_cub_extension(filename, data);
@@ -253,4 +255,8 @@ int main(int ac, char *av[])
         return(1);
     ft_bzero(data, sizeof(data));
     parse_cub(av[1], data);
+	// printf("textures.east[%s]\n", data->textures.east);
+	// printf("textures.north[%s]\n", data->textures.north);
+	// printf("textures.south{%s}\n", data->textures.south);
+	// printf("textures.west{%s}\n", data->textures.west);
 }
