@@ -14,19 +14,38 @@
 # include <string.h>
 # include <unistd.h>
 
+typedef struct s_color {
+    int r;
+    int g;
+    int b;
+} t_color;
+
+typedef struct s_textures {
+    char *north;
+    char *south;
+    char *west;
+    char *east;
+} t_textures;
 typedef struct s_data
 {
     char **map;
+    int plyar_x;
+    int plyar_y;
+    int map_width;
+    int map_height;
+    char *floor;
+    char *ceiling;
+    t_textures textures;
 }t_data;
 
 
 char	*get_next_line(int fd);
 void	free_map(char **map);
 void	exit_map(char **map);
-int	    len_height(char *path_file);
+int	    len_height(int fd);
 void	loop_map(char *r_l_line, int fd, char **map, t_data *data);
-char	**get_map(char *path_file, int len, t_data *data);
-void	check_dot_ber(char *path_file, t_data *data);
+char	**get_map(int fd, int len, t_data *data);
+void	has_cub_extension(char *path_file, t_data *data);
 void    parse_cub(char *filename, t_data *data);
 
 #endif
