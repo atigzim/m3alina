@@ -1,6 +1,6 @@
-NAME = CUB_3D
-CC = cc
-CFLAGS = -Wall -Wextra -Werror
+NAME = cub3d
+CC = cc -g
+CFLAGS = -Wall -Wextra #-Werror
 
 SRC = main.c gnl/gnl.c
 OBJ = $(SRC:.c=.o)

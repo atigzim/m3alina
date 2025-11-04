@@ -1,29 +1,29 @@
 #include "cub_3d.h"
 
-void	free_map(char **map)
-{
-	int	i;
+// void	free_map(char **map)
+// {
+// 	int	i;
 
-	if (!map)
-		return ;
-	i = 0;
-	while (map[i])
-	{
-		free(map[i]);
-		map[i] = NULL;
-		i++;
-	}
-	free(map);
-	map = NULL;
-}
+// 	if (!map)
+// 		return ;
+// 	i = 0;
+// 	while (map[i])
+// 	{
+// 		free(map[i]);
+// 		map[i] = NULL;
+// 		i++;
+// 	}
+// 	free(map);
+// 	map = NULL;
+// }
 
-void	exit_map(char **map)
-{
-	write(1, "Error\n", 6);
-	write(1, "map invalid\n", 13);
-	free_map(map);
-	exit(1);
-}
+// void	exit_map(char **map)
+// {
+// 	write(1, "Error\n", 6);
+// 	write(1, "map invalid\n", 13);
+// 	free_map(map);
+// 	exit(1);
+// }
 
 int	len_height(int fd)
 {
@@ -35,27 +35,27 @@ int	len_height(int fd)
 	while (r_l_map && r_l_map[0] == '1')
 	{
 		len++;
-		free(r_l_map);
+		// free(r_l_map);
 		r_l_map = get_next_line(fd);
 	}
-	free(r_l_map);
+	// free(r_l_map);
 	return (len);
 }
 
-void	loop_map(char *r_l_line, int fd, char **map, t_data *mp)
-{
-	while (r_l_line)
-	{
-		if (r_l_line[0] != '\0')
-		{
-			free(r_l_line);
-			free(mp);
-			exit_map(map);
-		}
-		free(r_l_line);
-		r_l_line = get_next_line(fd);
-	}
-}
+// void	loop_map(char *r_l_line, int fd, char **map, t_data *mp)
+// {
+// 	while (r_l_line)
+// 	{
+// 		if (r_l_line[0] != '\0')
+// 		{
+// 			free(r_l_line);
+// 			free(mp);
+// 			exit_map(map);
+// 		}
+// 		free(r_l_line);
+// 		r_l_line = get_next_line(fd);
+// 	}
+// }
 
 // char	**get_map(int fd, int len, t_data *data)
 // {	
@@ -91,7 +91,7 @@ void	has_cub_extension(char *path_file, t_data *data)
 			if (ft_strlen(&path_file[i + 1]) <= 4
 				|| ft_strlen(path_file) <= 4)
 			{
-				free(data);
+				// free(data);
 				write(1, "Error\n", 6);
 				write(1, "Only valid \".cub\" map files are allowed!\n", 42);
 				exit(1);
@@ -101,7 +101,7 @@ void	has_cub_extension(char *path_file, t_data *data)
 	}
 	if (ft_strncmp(path_file + ft_strlen(path_file) - 4, ".cub", 4))
 	{
-		free(data);
+		// free(data);
 		write(1, "Error\n", 6);
 		write(1, "Only valid \".cub\" map files are allowed!\n", 42);
 		exit(1);
@@ -135,7 +135,6 @@ char *find_int(char *line)
 				}
 				i++;
 			}
-			printf("{{{%s}}}\n", line);
 			return(line);
 		}
 		line++;
@@ -169,7 +168,6 @@ char *find_path(char *line, char *position)
 	if (ft_strncmp(position, line, 2))
 		line+=2;
 	line = skip_spacess(line);
-	printf(".....%s\n", line);
 	return (line);
 }
 
@@ -212,9 +210,9 @@ void define_textures(t_data *data, int fd, int *offset)
 	{
 		if (*offset < 6)
 		{
-			(*offset)++;
 			pars_textures(line, data);
-			free(line);
+			(*offset)++;
+			// free(line);
 		}
 		else
 			break;
@@ -238,7 +236,7 @@ void parse_cub(char *filename, t_data *data)
 	}
 	define_textures(data, fd, &offset);
 	data->map_width = len_height(fd);
-    // data->map =
+    data->map =
 }
 
 int main(int ac, char *av[])
