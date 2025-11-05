@@ -14,24 +14,37 @@ static void strip_newline(char *line)
     }
 }
 
-int	len_height(int fd)
+int	len_height(char *filename, t_data *data)
 {
 	int		len;
 	char	*r_l_map;
+	int fd;
 
 	len = 0;
+	fd = open(filename, O_RDONLY);
+	if (fd == -1)
+	{
+		//free_all
+		printf("Error\nCannot open .cub file\n");
+		exit(1);
+	}
 	r_l_map = get_next_line(fd);
+	while(r_l_map && r_l_map[0] != '1')
+	{
+		free(r_l_map);
+		r_l_map = get_next_line(fd);
+	}
 	while (r_l_map && r_l_map[0] == '1')
 	{
 		len++;
+		if ((int)ft_strlen(r_l_map) -1 > data->map_width)
+			data->map_width = ft_strlen(r_l_map) -1;
 		free(r_l_map);
 		r_l_map = get_next_line(fd);
 	}
 	free(r_l_map);
 	return (len);
 }
-
-
 
 void	has_cub_extension(char *path_file, t_data *data)
 {
@@ -183,7 +196,7 @@ void parse_cub(char *filename, t_data *data)
 		exit(1);
 	}
 	define_textures(data, fd);
-	data->map_width = len_height(fd);
+	data->map_width = len_height(filename, data);
     // data->map =
 }
 
@@ -201,6 +214,7 @@ int main(int ac, char *av[])
         return(1);
     ft_bzero(data, sizeof(data));
     parse_cub(av[1], data);
+	printf("%d\n", data->map_width);
 	// printf("textures.east[%s]\n", data->textures.east);
 	// printf("textures.north[%s]\n", data->textures.north);
 	// printf("textures.south{%s}\n", data->textures.south);
