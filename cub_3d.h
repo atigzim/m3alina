@@ -3,7 +3,7 @@
 
 #include "libft/libft.h"
 # include <math.h>
-# include <mlx.h>
+// # include <mlx.h>
 # include <ctype.h>
 # include <fcntl.h>
 # include <limits.h>
