@@ -40,16 +40,15 @@ typedef struct s_data
 
 
 char	*get_next_line(int fd);
-void	free_map(char **map);
-void	exit_map(char **map);
+void strip_newline(char *line);
+bool	ft_isspace(char c);
 int	len_height(char *filename, t_data *data);
 char	*skip_spacess(char *line);
-int	check_textures(char *line);
+bool check_textures(char *line);
 char	*find_path(char *line, char *identifier);
 char	*find_int(char *line);
-void	loop_map(char *r_l_line, int fd, char **map, t_data *data);
-// char	**get_map(int fd, int len, t_data *data);
 void	has_cub_extension(char *path_file, t_data *data);
 void    parse_cub(char *filename, t_data *data);
+void define_textures(t_data *data, int fd);
 
 #endif

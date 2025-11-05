@@ -1,8 +1,7 @@
 NAME = cub3d
-CC = cc -g
-CFLAGS = -Wall -Wextra #-Werror
-
-SRC = main.c gnl/gnl.c
+CC = cc 
+CFLAGS = -Wall -Wextra -Werror
+SRC = main.c gnl/gnl.c parsing/parsing.c parsing/parse_utils.c
 OBJ = $(SRC:.c=.o)
 INCLUDE = cub_3d.h
 LIBFT = libft/libft.a
@@ -14,9 +13,6 @@ $(LIBFT):
 
 $(NAME): $(OBJ) $(INCLUDE) $(LIBFT)
 	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -o $(NAME)
-
-# %.o : %.c
-# 	@$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
 	@rm -rf $(OBJ)
