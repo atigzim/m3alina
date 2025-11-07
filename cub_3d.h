@@ -14,12 +14,6 @@
 # include <string.h>
 # include <unistd.h>
 
-typedef struct s_color {
-    int r;
-    int g;
-    int b;
-} t_color;
-
 typedef struct s_textures {
     char *north;
     char *south;
@@ -43,6 +37,7 @@ char	*get_next_line(int fd);
 void strip_newline(char *line);
 bool	ft_isspace(char c);
 int	len_height(char *filename, t_data *data);
+bool	search_map(char *line);
 char	*skip_spacess(char *line);
 bool check_textures(char *line);
 char	*find_path(char *line, char *identifier);

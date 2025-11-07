@@ -71,5 +71,7 @@ void define_textures(t_data *data, int fd)
 			break;
 		line = get_next_line(fd);
 	}
+	close(fd);
 	free(line);
 }
+

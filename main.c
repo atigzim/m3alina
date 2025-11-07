@@ -9,7 +9,7 @@ char *padd_line(char *line, int len)
 	new_line = malloc(len);
 	while(i < len)
 	{
-		if(line)
+		if(line && line[i] != ' ')
 			new_line[i] = line[i];
 		else
 			new_line[i] = 'A';
@@ -43,21 +43,89 @@ char **new_map(t_data *data)
 	new_map[i] = NULL;
 	return(new_map);
 }
+// char *padd_line(char *line, int len)
+// {
+// 	int i;
+// 	size_t src_len;
+// 	char *new_line;
 
-bool check_wall(t_data *data, int i, int j)
+// 	if (len <= 0)
+// 		return (NULL);
+// 	new_line = malloc(len + 1);
+// 	if (!new_line)
+// 		return (NULL);
+// 	src_len = (line) ? ft_strlen(line) : 0;
+// 	i = 0;
+// 	while (i < len)
+// 	{
+// 		if (line && (size_t)i < src_len)
+// 			new_line[i] = line[i];
+// 		else
+// 			new_line[i] = 'A';
+// 		i++;
+// 	}
+// 	new_line[len] = '\0';
+
+// 	return (new_line);
+// }
+
+// char **new_map(t_data *data)
+// {
+// 	char **new_map;
+// 	int i;
+
+// 	i = 0;
+// 	new_map = malloc(sizeof(char *) * (data->map_height + 1));
+// 	if(!new_map)
+// 		return(NULL);
+// 	while(data->map[i])
+// 	{
+// 		new_map[i] = padd_line(data->map[i], data->map_width + 1);
+// 		if (!new_map[i])
+// 		{
+// 			while (--i >= 0)
+// 				free(new_map[i]);
+// 			free(new_map);
+// 			return (NULL);
+// 		}
+// 		i++;
+// 	}
+// 	new_map[i] = NULL;
+// 	i = 0;
+// 	printf(".............\n");
+// 	while (new_map[i])
+// 	{
+// 		printf("%s\n", new_map[i]);
+// 		i++;
+// 	}
+// 	printf(".............\n");
+// 	return(new_map);
+// }
+
+bool check_wall(int lne, int i, int j)
 {
-	if( i == 0 || j == 0 || i == data->map_height -1
-			|| j == data->map_width -1 )
+	if( i == 0 || j == 0 || i == lne -1
+			|| j == lne -1 )
 			return (true);
 	return (false);
 
 }
 bool check_out(char **map, int i, int j)
 {
-	if( map[i][j - 1] == 'A' || map[i][j + 1] == 'A'
-		|| map[i + 1][j] == 'A' || map[i - 1][j] == 'A')
+	if(map[i][j] == '0' && (map[i][j - 1] == 'A' || map[i][j + 1] == 'A'
+		|| map[i + 1][j] == 'A' || map[i - 1][j] == 'A'))
 		return (true);
 	return (false);
+}
+void check_valid_character(char c)
+{
+	if (c != '0' && c != '1' && c != '2' && c != 'N'
+		&& c != 'S' && c != 'E' && c != 'W')
+	{
+		// free_all
+		printf("error\ninvalid character in map\n");
+		exit(1);
+	}
 }
 void map_valid(char **map, t_data *data)
 {
@@ -65,14 +133,15 @@ void map_valid(char **map, t_data *data)
 	int j;
 
 	i = 0;
+
 	while(map[i])
 	{
 		j = 0;
 		while (map[i][j])
 		{
-			if(check_wall(data, i, j))
+			if(check_wall(ft_strlen(map[i]), i, j))
 			{
-				if(map[i][j] != '1' || map[i][j] != 'A')
+				if(map[i][j] != '1' && map[i][j] != 'A')
 				{
 					//free_all;
 					printf("error\nmap inavlid\n");
@@ -83,12 +152,16 @@ void map_valid(char **map, t_data *data)
 			{
 				//free_all;
 				printf("error\nmap inavlid\n");
-				exit(1);				
+				free(data->map);
+				exit(1);	
 			}
+			if(map[i][j] != 'A')
+				check_valid_character(map[i][j]);
 			j++;
 		}
 		i++;
 	}
+	printf("map is valid\n");
 }
 
 bool search_map(char *line)
@@ -132,8 +205,7 @@ void add_map_line(t_data *data, char *filename)
     data->map = malloc(sizeof(char *) * (data->map_height + 1));
     if (!data->map)
         return;
-
-    while (line && search_map(line))
+    while (line && i < data->map_height && search_map(line))
     {
         data->map[i] = ft_strdup(line);
         strip_newline(data->map[i]);
@@ -144,6 +216,7 @@ void add_map_line(t_data *data, char *filename)
     data->map[i] = NULL;
     close(fd);
 }
+
 
 
 void parse_cub(char *filename, t_data *data)
@@ -159,9 +232,9 @@ void parse_cub(char *filename, t_data *data)
 		exit(1);
 	}
 	define_textures(data, fd);
-	data->map_width = len_height(filename, data);
+	data->map_height = len_height(filename, data);
     add_map_line(data, filename);
-	// map_valid(new_map(data), data);
+	map_valid(new_map(data), data);
 }
 
 int main(int ac, char *av[])
@@ -173,16 +246,16 @@ int main(int ac, char *av[])
         printf("Usage: %s <map.cub>\n", av[0]);
         return (1);
     }
-    data = malloc(sizeof(t_data)); 
-    if(!data)
-        return(1);
-    ft_bzero(data, sizeof(data));
+	data = malloc(sizeof(t_data)); 
+	if(!data)
+		return(1);
+	ft_bzero(data, sizeof(t_data));
     parse_cub(av[1], data);
 	// printf("%d\n", data->map_width);
 	// int i = 0;
 	// while(data->map[i])
 	// {
-	// 	printf("%s", data->map[i]);
+	// 	printf("%s\n", data->map[i]);
 	// 	i++;
 	// }
 	// printf("textures.east[%s]\n", data->textures.east);

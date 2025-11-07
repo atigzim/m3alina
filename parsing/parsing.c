@@ -29,12 +29,12 @@ int	len_height(char *filename, t_data *data)
 		exit(1);
 	}
 	r_l_map = get_next_line(fd);
-	while(r_l_map && r_l_map[0] != '1')
+	while(r_l_map && !search_map(r_l_map))
 	{
 		free(r_l_map);
 		r_l_map = get_next_line(fd);
 	}
-	while (r_l_map && r_l_map[0] == '1')
+	while (r_l_map && search_map(r_l_map))
 	{
 		len++;
 		if ((int)ft_strlen(r_l_map) -1 > data->map_width)
@@ -43,6 +43,7 @@ int	len_height(char *filename, t_data *data)
 		r_l_map = get_next_line(fd);
 	}
 	free(r_l_map);
+	close(fd);
 	return (len);
 }
 
