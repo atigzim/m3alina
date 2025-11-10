@@ -34,7 +34,7 @@ typedef struct s_data
 
 
 char	*get_next_line(int fd);
-void strip_newline(char *line);
+char *strip_newline(char *line);
 bool	ft_isspace(char c);
 int	len_height(char *filename, t_data *data);
 bool	search_map(char *line);
@@ -45,5 +45,6 @@ char	*find_int(char *line);
 void	has_cub_extension(char *path_file, t_data *data);
 void    parse_cub(char *filename, t_data *data);
 void define_textures(t_data *data, int fd);
+void free_all_and_print_error(t_data *data, char **map);
 
 #endif

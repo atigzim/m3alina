@@ -1,6 +1,6 @@
 #include "../cub_3d.h"
 
-void strip_newline(char *line)
+char *strip_newline(char *line)
 {
     size_t i = 0;
     while (line[i])
@@ -8,10 +8,11 @@ void strip_newline(char *line)
         if (line[i] == '\n')
         {
             line[i] = '\0';
-            return;
+            return line;
         }
         i++;
     }
+	return line;
 }
 
 int	len_height(char *filename, t_data *data)

@@ -1,7 +1,7 @@
 NAME = cub3d
 CC = cc 
 CFLAGS = -Wall -Wextra -Werror
-SRC = main.c gnl/gnl.c parsing/parsing.c parsing/parse_utils.c
+SRC = main.c gnl/gnl.c parsing/parsing.c parsing/parse_utils.c parsing/free_file.c
 OBJ = $(SRC:.c=.o)
 INCLUDE = cub_3d.h
 LIBFT = libft/libft.a
