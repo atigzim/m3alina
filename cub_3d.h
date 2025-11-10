@@ -1,9 +1,9 @@
 #ifndef CUB_3D_3D
 # define CUB_3D_3D
 
-#include "libft/libft.h"
+#include <mlx.h> 
+# include "libft/libft.h"
 # include <math.h>
-// # include <mlx.h>
 # include <ctype.h>
 # include <fcntl.h>
 # include <limits.h>
@@ -20,18 +20,36 @@ typedef struct s_textures {
     char *west;
     char *east;
 } t_textures;
+
+typedef struct s_image
+{
+	void		*img_ptr;
+	char		*pixel_data;
+	int			bpp;
+	int			endian;
+	int			line_size;
+	int			width;
+	int			height;
+}    t_image;
+
 typedef struct s_data
 {
     char **map;
-    int plyar_x;
-    int plyar_y;
+    int player_x;
+    int player_y;
+    char player_dir;
     int map_width;
     int map_height;
     char *floor;
     char *ceiling;
+    void *mlx;
+    void *window;
+    t_image buffer;
     t_textures textures;
 }t_data;
 
+#define WIN_WIDTH 1900
+#define WIN_HEIGHT 800
 
 char	*get_next_line(int fd);
 char *strip_newline(char *line);
@@ -46,5 +64,12 @@ void	has_cub_extension(char *path_file, t_data *data);
 void    parse_cub(char *filename, t_data *data);
 void define_textures(t_data *data, int fd);
 void free_all_and_print_error(t_data *data, char **map);
+char *padd_line(char *line, int len);
+char **new_map(t_data *data);
+void map_valid(char **map, t_data *data);
+void add_map_line(t_data *data, char *filename);
+bool check_wall(t_data *data, int lne, int i, int j);
+bool check_out(char **map, int i, int j);
+void check_valid_character(char c, t_data *data, char **map);
 
 #endif

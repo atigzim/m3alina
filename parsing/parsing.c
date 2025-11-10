@@ -93,6 +93,11 @@ char *find_int(char *line)
 		return(NULL);
 	while (*line && *line != '\n')
 	{
+		if (!ft_strncmp("C", line, 1) || !ft_strncmp("F", line, 1))
+		{
+			line++;
+			line = skip_spacess(line);
+		}
 		if (ft_isdigit(*line))
 		{
 			while(line[i])
@@ -106,7 +111,11 @@ char *find_int(char *line)
 			}
 			return(line);
 		}
-		line++;
+		else
+		{
+			printf("errrrrrr\n");
+			exit(1);
+		}
 	}
 	return(NULL);
 }

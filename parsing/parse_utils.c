@@ -71,6 +71,11 @@ void define_textures(t_data *data, int fd)
 			break;
 		line = get_next_line(fd);
 	}
+	if(offset < 6)
+	{
+		printf("Error\nInvalid texture or color definition\n");
+		free_all_and_print_error(data, NULL);
+	}
 	close(fd);
 	free(line);
 }
