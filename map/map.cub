@@ -1,6 +1,6 @@
-C 144,224,239
+C 204,197,176
 F 204,197,176
-NO textures/wolfenstein/mossy.xpm
+NO textures/wolfenstein/mossy.bs
 SO textures/wolfenstein/color_stone.xpm
 WE textures/wolfenstein/eagle.xpm
 EA textures/wolfenstein/grey_stone.xpm

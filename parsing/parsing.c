@@ -61,7 +61,7 @@ void	has_cub_extension(char *path_file, t_data *data)
 				|| ft_strlen(path_file) <= 4)
 			{
 				free(data);
-				write(1, "Error\n", 6);
+				write(1, "Error\n", 6);	
 				write(1, "Only valid \".cub\" map files are allowed!\n", 42);
 				exit(1);
 			}
@@ -84,38 +84,109 @@ bool	ft_isspace(char c)
 		|| c == '\r');
 }
 
+// char *find_int(char *line)
+// {
+// 	int i;
+// 	int j;
+// 	int flag;	
+
+// 	i = 0;
+// 	flag = 0;
+// 	if (!line)
+// 		return(NULL);
+// 	while (*line && *line != '\n')
+// 	{
+// 		if (!ft_strncmp("C", line, 1) || !ft_strncmp("F", line, 1))
+// 		{
+// 			line++;
+// 			line = skip_spacess(line);
+// 		}
+// 		if (ft_isdigit(*line))
+// 		{
+// 			while(line[i])
+// 			{
+// 				j = i;
+// 				while(line[j] && ft_isdigit(line[j]))
+// 					j++;
+// 				printf("num: %d\n", ft_atoi(ft_substr(line, i, j - i)));
+// 				if(ft_atoi(ft_substr(line, i, j - i)) < 0 || 
+// 					ft_atoi(ft_substr(line, i, j - i)) > 255)
+// 				{
+// 					printf("errrrrrr\n");
+// 					exit(1);
+// 				}
+// 				i = j;
+// 				if(line[i] == ',')
+// 					flag++;
+// 				if(!ft_isspace(line[i]) && line[i] != ',')
+// 				{
+// 					printf("errrrrrr\n");
+// 					exit(1);
+// 				}
+// 				i++;
+// 				if(flag >= 2)
+// 					exit(1);
+// 			}
+// 			return(line);
+// 		}
+// 		else
+// 		{
+// 			printf("errrrrrr\n");
+// 			exit(1);
+// 		}
+// 	}
+// 	return(NULL);
+// }
+
 char *find_int(char *line)
 {
 	int i;
+	int j;
+	int flag;	
 
 	i = 0;
+	flag = 0;
 	if (!line)
 		return(NULL);
-	while (*line && *line != '\n')
+	if(!ft_strncmp("C", line, 1) || !ft_strncmp("F", line, 1))
 	{
-		if (!ft_strncmp("C", line, 1) || !ft_strncmp("F", line, 1))
-		{
-			line++;
-			line = skip_spacess(line);
-		}
-		if (ft_isdigit(*line))
-		{
-			while(line[i])
-			{
-				if(!ft_isdigit(line[i]) && !ft_isspace(line[i]) && line[i] != ',')
-				{
-					printf("errrrrrr\n");
-					exit(1);
-				}
-				i++;
-			}
-			return(line);
-		}
-		else
+		line++;
+		line = skip_spacess(line);
+	}
+	while(line[i])
+	{
+		if (line[i] && !ft_isdigit(line[i]))
 		{
 			printf("errrrrrr\n");
 			exit(1);
 		}
+		j = i;
+		while(line[j] && ft_isdigit(line[j]))
+			j++;
+		if(ft_atoi(ft_substr(line, i, j - i)) < 0 || 
+			ft_atoi(ft_substr(line, i, j - i)) > 255)
+		{
+			printf("errrrrrr\n");
+			exit(1);
+		}
+		i = j;
+		while (line[i] && ft_isalpha(line[i]))
+			i++;
+		if (!line[i])
+			break ;
+		if(line[i] && line[i] == ',')
+			flag++;
+		else 
+		{
+			printf("%d\n", line[i]);
+			printf("errrrrrr\n");
+			exit(1);
+		}
+		while (line[i] && ft_isalpha(line[i]))
+			i++;
+		if(flag > 2)
+			exit(1);
+		i++;
 	}
-	return(NULL);
+	return(line);
 }

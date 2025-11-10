@@ -50,6 +50,13 @@ typedef struct s_data
 
 #define WIN_WIDTH 1900
 #define WIN_HEIGHT 800
+# define ESC 65307
+# define W 119
+# define A 97
+# define S 115
+# define D 100
+# define CLOSE 17
+# define TILE_SIZE 32
 
 char	*get_next_line(int fd);
 char *strip_newline(char *line);

@@ -25,6 +25,11 @@ char *find_path(char *line, char *position)
 {
 	if (!ft_strncmp(position, line, 2))
 		line +=2;
+	if (!ft_isspace(*line))
+	{
+		printf("Error\nInvalid texture path\n");
+		exit(1);
+	}
 	line = skip_spacess(line);
 	strip_newline(line);
 	return (line);
