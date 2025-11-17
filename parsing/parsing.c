@@ -84,61 +84,8 @@ bool	ft_isspace(char c)
 		|| c == '\r');
 }
 
-// char *find_int(char *line)
-// {
-// 	int i;
-// 	int j;
-// 	int flag;	
 
-// 	i = 0;
-// 	flag = 0;
-// 	if (!line)
-// 		return(NULL);
-// 	while (*line && *line != '\n')
-// 	{
-// 		if (!ft_strncmp("C", line, 1) || !ft_strncmp("F", line, 1))
-// 		{
-// 			line++;
-// 			line = skip_spacess(line);
-// 		}
-// 		if (ft_isdigit(*line))
-// 		{
-// 			while(line[i])
-// 			{
-// 				j = i;
-// 				while(line[j] && ft_isdigit(line[j]))
-// 					j++;
-// 				printf("num: %d\n", ft_atoi(ft_substr(line, i, j - i)));
-// 				if(ft_atoi(ft_substr(line, i, j - i)) < 0 || 
-// 					ft_atoi(ft_substr(line, i, j - i)) > 255)
-// 				{
-// 					printf("errrrrrr\n");
-// 					exit(1);
-// 				}
-// 				i = j;
-// 				if(line[i] == ',')
-// 					flag++;
-// 				if(!ft_isspace(line[i]) && line[i] != ',')
-// 				{
-// 					printf("errrrrrr\n");
-// 					exit(1);
-// 				}
-// 				i++;
-// 				if(flag >= 2)
-// 					exit(1);
-// 			}
-// 			return(line);
-// 		}
-// 		else
-// 		{
-// 			printf("errrrrrr\n");
-// 			exit(1);
-// 		}
-// 	}
-// 	return(NULL);
-// }
-
-char *find_int(char *line)
+char *find_int(char *line, t_data *data)
 {
 	int i;
 	int j;
@@ -155,10 +102,12 @@ char *find_int(char *line)
 	}
 	while(line[i])
 	{
+		while (line[i] && ft_isspace(line[i]))
+			i++;
 		if (line[i] && !ft_isdigit(line[i]))
 		{
 			printf("errrrrrr\n");
-			exit(1);
+			free_all_and_print_error(data, NULL);
 		}
 		j = i;
 		while(line[j] && ft_isdigit(line[j]))
@@ -167,10 +116,10 @@ char *find_int(char *line)
 			ft_atoi(ft_substr(line, i, j - i)) > 255)
 		{
 			printf("errrrrrr\n");
-			exit(1);
+			free_all_and_print_error(data, NULL);
 		}
 		i = j;
-		while (line[i] && ft_isalpha(line[i]))
+		while (line[i] && ft_isspace(line[i]))
 			i++;
 		if (!line[i])
 			break ;
@@ -178,14 +127,11 @@ char *find_int(char *line)
 			flag++;
 		else 
 		{
-			printf("%d\n", line[i]);
-			printf("errrrrrr\n");
-			exit(1);
+			printf("	errrrrrr\n");
+			free_all_and_print_error(data, NULL);
 		}
-		while (line[i] && ft_isalpha(line[i]))
-			i++;
 		if(flag > 2)
-			exit(1);
+			free_all_and_print_error(data, NULL);
 		i++;
 	}
 	return(line);

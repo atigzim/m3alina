@@ -59,6 +59,6 @@ void free_all_and_print_error(t_data *data, char **map)
 {
 	free_data(data);
 	free_map(map);
-    printf("Error\nInvalid map\n");
+    // printf("Error\nInvalid map\n");
     exit(1);
 }
