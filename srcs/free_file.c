@@ -1,6 +1,4 @@
-#include "../cub_3d.h"
-
-
+#include "../include/cub_3d.h"
 
 void check_not_valid_character(char c)
 {
@@ -34,10 +32,6 @@ void free_data(t_data *data)
 		free(data->textures.west);
 	if (data->textures.east)
 		free(data->textures.east);
-	if (data->floor)
-		free(data->floor);
-	if (data->ceiling)
-		free(data->ceiling);
 	free(data);
 }
 void free_map(char **map)
@@ -59,6 +53,5 @@ void free_all_and_print_error(t_data *data, char **map)
 {
 	free_data(data);
 	free_map(map);
-    // printf("Error\nInvalid map\n");
     exit(1);
 }
