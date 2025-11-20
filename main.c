@@ -17,7 +17,23 @@ void my_mlx_pixel_put(t_image *img, int x, int y, int color)
     dst = img->pixel_data + (y * img->line_size + x * (img->bpp / 8));
     *(unsigned int*)dst = color;
 }
+// void move(t_data *data)
+// {
+//     int i;
+//     int j;
 
+//     i = 0;
+//     j = 0;
+//     while()
+
+// }
+void move_player(t_data *data, int key)
+{
+    if (key == W)
+    {
+        data->player.y -= data->player.move_speed;
+    }
+}
 
 int	key_press(int keycode, void *param)
 {
@@ -30,6 +46,8 @@ int	key_press(int keycode, void *param)
             mlx_destroy_window(data->mlx, data->window);
         exit(0);
     }
+    else
+        move_player(data, keycode);
     return (0);
 }
 
@@ -91,68 +109,6 @@ void draw_player_position(t_data *data)
         }
     }
 }
-
-// void shoot_ray_from_position(t_data *data, int start_x, int start_y, double angle, int color)
-// {
-//     double ray_x = start_x;
-//     double ray_y = start_y;
-    
-//     double step_x = cos(angle);
-//     double step_y = sin(angle);
-    
-//     int distance = 0;
-//     int max_distance = 1000;
-    
-//     while (distance < max_distance)
-//     {
-//         ray_x += step_x;
-//         ray_y += step_y;
-        
-//         int px = (int)ray_x;
-//         int py = (int)ray_y;
-        
-//         if (px < 0 || px >= WIN_WIDTH || py < 0 || py >= WIN_HEIGHT)
-//             break;
-        
-//         int grid_x = px / TILE_SIZE;
-//         int grid_y = py / TILE_SIZE;
-        
-//         if (grid_x >= 0 && grid_x < data->map_width &&
-//             grid_y >= 0 && grid_y < data->map_height)
-//         {
-//             if (data->map[grid_y][grid_x] == '1')
-//             {
-//                 // Hit wall - draw marker
-//                 for (int i = -3; i <= 3; i++)
-//                 {
-//                     for (int j = -3; j <= 3; j++)
-//                     {
-//                         int hx = px + j;
-//                         int hy = py + i;
-//                         if (hx >= 0 && hx < WIN_WIDTH && hy >= 0 && hy < WIN_HEIGHT)
-//                             my_mlx_pixel_put(&data->buffer, hx, hy, 0xFFFFFF);
-//                     }
-//                 }
-//                 break;
-//             }
-//         }
-        
-//         // Draw ray
-//         for (int i = -1; i <= 1; i++)
-//         {
-//             for (int j = -1; j <= 1; j++)
-//             {
-//                 int dx = px + j;
-//                 int dy = py + i;
-//                 if (dx >= 0 && dx < WIN_WIDTH && dy >= 0 && dy < WIN_HEIGHT)
-//                     my_mlx_pixel_put(&data->buffer, dx, dy, color);
-//             }
-//         }
-        
-//         distance++;
-//     }
-// }
-
 
 void draw_block(t_image *img, int x, int y, int cool)
 {
@@ -260,6 +216,39 @@ void cast_one_ray(t_data *data, int ray_index)
         iter++;
     }
 }
+void render_walls(t_data *data)
+{
+    int i;
+    int y;
+    t_ray  *ray;
+    t_walls *wall;
+
+    i = 0;
+    wall = &data->wall;
+    while (i < WIN_WIDTH)
+    {
+        ray = &data->rays[i];
+        wall->corrected_dist = ray->distance *
+            cos(ray->ray_angle-data->player.angle);
+        wall->distance_to_plane = (WIN_WIDTH/2) / tan(FOV/2);
+        wall->wall_height =(TILE_SIZE / wall->corrected_dist)
+            * wall->distance_to_plane;
+        wall->wall_start =  (WIN_HEIGHT / 2) - (wall->wall_height/ 2);
+        wall->wall_end   = (WIN_HEIGHT / 2) + (wall->wall_height / 2);
+        if (wall->wall_start < 0) 
+            wall->wall_start = 0;
+        if (wall->wall_end >= WIN_HEIGHT)
+            wall->wall_end = WIN_HEIGHT - 1;
+        y = wall->wall_start;;
+        while ( y <= wall->wall_end)
+        {
+            my_mlx_pixel_put(&data->buffer, i, y, 0xAAAAAA);
+            y++;
+        }
+        i++;
+    }   
+}
+
 
 void cast_all_rays(t_data *data)
 {
@@ -275,6 +264,7 @@ int game_loop(t_data *data)
 {
     grid_lines(data);
     cast_all_rays(data);
+    render_walls(data);
     if (data && data->mlx && data->window && data->buffer.img_ptr)
         mlx_put_image_to_window(data->mlx, data->window,
             data->buffer.img_ptr, 0, 0);

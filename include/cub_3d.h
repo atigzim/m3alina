@@ -70,8 +70,6 @@ typedef struct s_ray
     double wall_hit_y;
     double ray_x;
     double ray_y;
-    double temp_hit_x;
-    double temp_hit_y;
     int grid_x;
     int grid_y;
     double start_x;
@@ -79,6 +77,15 @@ typedef struct s_ray
 
     int is_vertical_hit;   // 1 = vertical wall, 0 = horizontal wall
 } t_ray;
+
+typedef struct s_walls
+{
+    double corrected_dist;
+    double distance_to_plane;
+    double wall_height;
+    int wall_start;
+    int wall_end;
+}t_walls;
 
 typedef struct s_player
 {
@@ -105,12 +112,11 @@ typedef struct s_data
     int ceiling_color;
     void *mlx;
     void *window;
-    double temp_hit_x;
-    double temp_hit_y;
     t_image buffer;
     t_textures textures;
     t_player player;
     t_ray    rays[WIN_WIDTH];
+    t_walls wall;
 }   t_data;
 
 char	*get_next_line(int fd);
