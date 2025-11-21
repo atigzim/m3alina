@@ -12,111 +12,65 @@
 
 #include "../include/cub_3d.h"
 
-// Check VERTICAL walls
-double get_vert(t_data *data, double ray)
+void grid_lines(t_data *data)
 {
-    double x;
-    double y;
-    double x_intercept;
-    double y_intercept;
-    int pixel;
+    int x = 0;
+    int y = 0;
 
-    x = TILE_SIZE;
-    y = TILE_SIZE * tan(ray);
-    x_intercept = floor(data->player.x / TILE_SIZE) * TILE_SIZE;
-    pixel = view_check(ray, &x_intercept, &x, 0);
-    y_intercept = data->player.y + (x_intercept - data->player.x) * tan(ray);
-    
-    if ((direction_check(ray, 'x') && y < 0) || (!direction_check(ray, 'x') && y > 0))
-        y *= -1;
-    
-    while (pos_is_wall(data, x_intercept - pixel, y_intercept))
+    while(x < WIN_WIDTH)
     {
-        x_intercept += x;
-        y_intercept += y;
+        y = 0;
+        while(y < WIN_HEIGHT)
+        {
+            if(x % TILE_SIZE == 0 || y % TILE_SIZE == 0)
+                my_mlx_pixel_put(&data->buffer, x, y, 0xFFFFFF);
+            if(x == (int)data->player.x && y == (int)data->player.y)
+                draw_block(&data->buffer, x - 2, y - 2, 0xFF0000);
+            y ++;
+        }
+        x ++;
     }
-    
-    // Store hit position in temporary variables
-    data->temp_hit_x = x_intercept;
-    data->temp_hit_y = y_intercept;
-    
-    return (calc_distance(x_intercept, data->player.x,
-                         y_intercept, data->player.y));
+}
+void init_rays(t_data *data)
+{
+    int i = 0;
+    while (i < WIN_WIDTH)
+    {
+        data->rays[i].ray_angle = data->player.angle - (FOV / 2) + (i * (FOV / WIN_WIDTH));
+        i++;
+    }
 }
 
-// Check HORIZONTAL walls
-double get_horz(t_data *data, double ray)
+void draw_player_position(t_data *data)
 {
-    double x;
-    double y;
-    double x_intercept;
-    double y_intercept;
-    int pixel;
-
-    y = TILE_SIZE;
-    x = TILE_SIZE / tan(ray);
-    y_intercept = floor(data->player.y / TILE_SIZE) * TILE_SIZE;
-    pixel = view_check(ray, &y_intercept, &y, 1);
-    x_intercept = data->player.x + (y_intercept - data->player.y) / tan(ray);
-    
-    if ((direction_check(ray, 'y') && x > 0) || (!direction_check(ray, 'y') && x < 0))
-        x *= -1;
-    
-    while (pos_is_wall(data, x_intercept, y_intercept - pixel))
+    int player_screen_x = (int)data->player.x;  // Already calculated in init_player
+    int player_screen_y = (int)data->player.y;
+    for (int i = -8; i <= 8; i++)
     {
-        x_intercept += x;
-        y_intercept += y;
+        for (int j = -8; j <= 8; j++)
+        {
+            int px = player_screen_x + j;
+            int py = player_screen_y + i;
+            if (px >= 0 && px < WIN_WIDTH && py >= 0 && py < WIN_HEIGHT)
+                my_mlx_pixel_put(&data->buffer, px, py, 0xFFFFFF);
+        }
     }
-    
-    // Store hit position
-    data->temp_hit_x = x_intercept;
-    data->temp_hit_y = y_intercept;
-    
-    return (calc_distance(x_intercept, data->player.x,
-                         y_intercept, data->player.y));
 }
 
-void cast_rays(t_data *data)
+void draw_block(t_image *img, int x, int y, int cool)
 {
-    int strip_id;
+	int i;
+	int j ;
 
-    strip_id = 0;
-    
-    // Start from leftmost ray
-    double ray_angle = update_angle(data->player.angle - (FOV / 2));
-    
-    while (strip_id < WIN_WIDTH)
-    {
-        double horz_dist = get_horz(data, ray_angle);
-        double horz_x = data->temp_hit_x;
-        double horz_y = data->temp_hit_y;
-        
-        double vert_dist = get_vert(data, ray_angle);
-        double vert_x = data->temp_hit_x;
-        double vert_y = data->temp_hit_y;
-        
-        // Choose closer hit
-        if (horz_dist < vert_dist)
-        {
-            data->rays[strip_id].distance = horz_dist;
-            data->rays[strip_id].hit_x = horz_x;
-            data->rays[strip_id].hit_y = horz_y;
-            data->rays[strip_id].is_vertical_hit = 0;
-        }
-        else
-        {
-            data->rays[strip_id].distance = vert_dist;
-            data->rays[strip_id].hit_x = vert_x;
-            data->rays[strip_id].hit_y = vert_y;
-            data->rays[strip_id].is_vertical_hit = 1;
-        }
-        
-        data->rays[strip_id].ray_angle = ray_angle;
-        
-        // Draw 3D projection for this strip
-        creat_3d_projection(data, strip_id);
-        
-        strip_id++;
-        ray_angle = update_angle(ray_angle + (FOV / WIN_WIDTH));
-    }
+	j = x;
+	while (j < x + 4)
+	{
+		i = y;
+		while (i < y + 4)
+		{
+			my_mlx_pixel_put(img, j, i, cool);
+			i++;
+		}
+		j++;
+	}
 }

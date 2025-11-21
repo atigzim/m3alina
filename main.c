@@ -1,39 +1,72 @@
 # include "include/cub_3d.h"
 
-void init_buffer(t_data *mlx)
+void turn_left(t_data *data)
 {
-	mlx->buffer.img_ptr = mlx_new_image(mlx->mlx, WIN_WIDTH, WIN_HEIGHT);
-	mlx->buffer.width =  WIN_WIDTH;
-	mlx->buffer.height =  WIN_HEIGHT;
-	mlx->buffer.pixel_data = mlx_get_data_addr(
-        mlx->buffer.img_ptr, &mlx->buffer.bpp,
-        &mlx->buffer.line_size, &mlx->buffer.endian);
+    data->player.angle -= data->player.rotation_speed;
+
+    if (data->player.angle < 0)
+        data->player.angle += 2 * M_PI;
 }
 
-void my_mlx_pixel_put(t_image *img, int x, int y, int color)
+void turn_right(t_data *data)
 {
-    char *dst;
+    data->player.angle += data->player.rotation_speed;
 
-    dst = img->pixel_data + (y * img->line_size + x * (img->bpp / 8));
-    *(unsigned int*)dst = color;
+    if (data->player.angle > 2 * M_PI)
+        data->player.angle -= 2 * M_PI;
 }
-// void move(t_data *data)
-// {
-//     int i;
-//     int j;
 
-//     i = 0;
-//     j = 0;
-//     while()
-
-// }
 void move_player(t_data *data, int key)
 {
     if (key == W)
-    {
         data->player.y -= data->player.move_speed;
-    }
+    if(key == A)
+        data->player.x -= data->player.move_speed;
+    if(key == D)
+        data->player.x += data->player.move_speed;
+    if (key == S)
+        data->player.y += data->player.move_speed;
+    if(key == LEFT)
+        turn_left(data);
+    if(key == RIGHT)
+        turn_right(data);
 }
+
+// void move_player(t_data *data, int key)
+// {
+//     double move = data->player.move_speed;
+
+//     if (key == W) // forward
+//     {
+//         data->player.x += cos(data->player.angle) * move;
+//         data->player.y += sin(data->player.angle) * move;
+//     }
+
+//     if (key == S) // backward
+//     {
+//         data->player.x -= cos(data->player.angle) * move;
+//         data->player.y -= sin(data->player.angle) * move;
+//     }
+
+//     if (key == A) // strafe left
+//     {
+//         data->player.x += cos(data->player.angle - M_PI_2) * move;
+//         data->player.y += sin(data->player.angle - M_PI_2) * move;
+//     }
+
+//     if (key == D) 
+//     {
+//         data->player.x += cos(data->player.angle + M_PI_2) * move;
+//         data->player.y += sin(data->player.angle + M_PI_2) * move;
+//     }
+
+//     if (key == LEFT)
+//         turn_left(data);
+
+//     if (key == RIGHT)
+//         turn_right(data);
+// }
+
 
 int	key_press(int keycode, void *param)
 {
@@ -78,193 +111,9 @@ void parse_cub(char *filename, t_data *data)
 	close(fd);
 }
 
-void init_player(t_data *data)
-{
-    data->player.move_speed = 3;
-    data->player.rotation_speed = 0.09;
-	data->player.x = data->player_x*TILE_SIZE + (TILE_SIZE /2);
-	data->player.y = data->player_y *TILE_SIZE + (TILE_SIZE /2);
-    if (data->player_dir == 'N')
-        data->player.angle = -M_PI / 2;
-    else if (data->player_dir == 'S')
-        data->player.angle = M_PI / 2;
-    else if (data->player_dir == 'W')
-        data->player.angle = M_PI;
-    else
-        data->player.angle = 0;
-}
-
-void draw_player_position(t_data *data)
-{
-    int player_screen_x = (int)data->player.x;  // Already calculated in init_player
-    int player_screen_y = (int)data->player.y;
-    for (int i = -8; i <= 8; i++)
-    {
-        for (int j = -8; j <= 8; j++)
-        {
-            int px = player_screen_x + j;
-            int py = player_screen_y + i;
-            if (px >= 0 && px < WIN_WIDTH && py >= 0 && py < WIN_HEIGHT)
-                my_mlx_pixel_put(&data->buffer, px, py, 0xFFFFFF);
-        }
-    }
-}
-
-void draw_block(t_image *img, int x, int y, int cool)
-{
-	int i;
-	int j ;
-
-	j = x;
-	while (j < x + 4)
-	{
-		i = y;
-		while (i < y + 4)
-		{
-			my_mlx_pixel_put(img, j, i, cool);
-			i++;
-		}
-		j++;
-	}
-}
-
-// void draw_background(t_data *data)
-// {
-// 	t_image *img;
-// 	int y;
-// 	int i;
-
-// 	i = 0;
-// 	img = &data->buffer;
-// 	while(data->map[i])
-// 	{
-// 		y = 0;
-// 		while(data->map[i][y])
-// 		{
-// 			if(data->map[i][y] == '1')
-// 				draw_block(img, y * TILE_SIZE, i * TILE_SIZE, 0xFF0000);
-// 			else if(data->map[i][y] != '0' && data->map[i][y] != '1')
-// 				draw_block(img, y * TILE_SIZE, i * TILE_SIZE, 0x00FF00);
-// 			y++;
-// 		}
-// 		i++;
-// 	}
-	
-// }
-void grid_lines(t_data *data)
-{
-    int x = 0;
-    int y = 0;
-
-    while(x < WIN_WIDTH)
-    {
-        y = 0;
-        while(y < WIN_HEIGHT)
-        {
-            if(x % TILE_SIZE == 0 || y % TILE_SIZE == 0)
-                my_mlx_pixel_put(&data->buffer, x, y, 0xFFFFFF);
-            if(x == (int)data->player.x && y == (int)data->player.y)
-                draw_block(&data->buffer, x - 2, y - 2, 0xFF0000);
-            y ++;
-        }
-        x ++;
-    }
-}
-void init_rays(t_data *data)
-{
-    int i = 0;
-    while (i < WIN_WIDTH)
-    {
-        data->rays[i].ray_angle = data->player.angle - (FOV / 2) + (i * (FOV / WIN_WIDTH));
-        i++;
-    }
-}
-void cast_one_ray(t_data *data, int ray_index)
-{
-    t_ray *ray = &data->rays[ray_index];
-
-    int iter = 0;
-    ray->start_x = data->player.x;
-    ray->start_y = data->player.y;
-
-    ray->ray_x = ray->start_x;
-    ray->ray_y = ray->start_y;
-    ray->step_x = cos(ray->ray_angle);
-    ray->step_y = sin(ray->ray_angle);
-
-    while ( iter < MAX_DESTINATIONS)
-    {
-        ray->ray_x += ray->step_x;
-        ray->ray_y += ray->step_y;
-        ray->grid_x = ray->ray_x / TILE_SIZE;
-        ray->grid_y = ray->ray_y / TILE_SIZE;
-        if (ray->grid_y < 0 || ray->grid_y >= data->map_height ||
-            ray->grid_x < 0 || ray->grid_x >= data->map_width)
-            break;
-        if (data->map[ray->grid_y][ray->grid_x] == '1')
-        {
-            ray->wall_hit_x = ray->ray_x;
-            ray->wall_hit_y = ray->ray_y;
-            ray->dx = ray->ray_x - ray->start_x;
-            ray->dy = ray->ray_y - ray->start_y;
-            ray->distance = sqrt(ray->dx * ray->dx + ray->dy * ray->dy);
-            ray->is_vertical_hit = (fabs(ray->step_x) > fabs(ray->step_y));
-            return;
-        }
-        my_mlx_pixel_put(&data->buffer,
-            (int)ray->ray_x, (int)ray->ray_y, 0x00FF00);
-        iter++;
-    }
-}
-void render_walls(t_data *data)
-{
-    int i;
-    int y;
-    t_ray  *ray;
-    t_walls *wall;
-
-    i = 0;
-    wall = &data->wall;
-    while (i < WIN_WIDTH)
-    {
-        ray = &data->rays[i];
-        wall->corrected_dist = ray->distance *
-            cos(ray->ray_angle-data->player.angle);
-        wall->distance_to_plane = (WIN_WIDTH/2) / tan(FOV/2);
-        wall->wall_height =(TILE_SIZE / wall->corrected_dist)
-            * wall->distance_to_plane;
-        wall->wall_start =  (WIN_HEIGHT / 2) - (wall->wall_height/ 2);
-        wall->wall_end   = (WIN_HEIGHT / 2) + (wall->wall_height / 2);
-        if (wall->wall_start < 0) 
-            wall->wall_start = 0;
-        if (wall->wall_end >= WIN_HEIGHT)
-            wall->wall_end = WIN_HEIGHT - 1;
-        y = wall->wall_start;;
-        while ( y <= wall->wall_end)
-        {
-            my_mlx_pixel_put(&data->buffer, i, y, 0xAAAAAA);
-            y++;
-        }
-        i++;
-    }   
-}
-
-
-void cast_all_rays(t_data *data)
-{
-    int i = 0;
-    while (i < WIN_WIDTH)
-    {
-        cast_one_ray(data, i);
-        i++;
-    }
-}
-
 int game_loop(t_data *data)
 {
-    grid_lines(data);
-    cast_all_rays(data);
-    render_walls(data);
+    draw_all(data);
     if (data && data->mlx && data->window && data->buffer.img_ptr)
         mlx_put_image_to_window(data->mlx, data->window,
             data->buffer.img_ptr, 0, 0);

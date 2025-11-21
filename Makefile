@@ -9,8 +9,9 @@ SRC = main.c \
 	  srcs/free_file.c \
 	  srcs/parsing_map_utils.c \
 	  srcs/parsing_map.c \
-	 # srcs/raycast.c \
-	  srcs/raycast_utils.c
+	  srcs/raycast.c \
+	  srcs/raycast_utils.c \
+	  srcs/init_all.c \
 
 OBJ = $(SRC:.c=.o)
 

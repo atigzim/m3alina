@@ -142,7 +142,6 @@ void check_valid_character(char c, t_data *data, char **map);
 
 //raycast
 
-void shoot_ray_from_position(t_data *data, int start_x, int start_y, double angle, int color);
 void cast_rays(t_data *data);
 int pos_is_wall(t_data *data, double dx, double dy);
 int direction_check(double angle, char c);
@@ -150,4 +149,16 @@ int view_check(double angle, double *inter, double *step, int is_horz);
 double update_angle(double angle);
 double calc_distance(double x1, double x2, double y1, double y2);
 void draw_3d_wall_strip(t_data *data, int strip_id);
+void grid_lines(t_data *data);
+void init_rays(t_data *data);
+void draw_block(t_image *img, int x, int y, int cool);
+void cast_one_ray(t_data *data, int ray_index);
+void render_walls(t_data *data);
+void draw_all(t_data *data);
+void cast_all_rays(t_data *data);
+void init_player(t_data *data);
+void my_mlx_pixel_put(t_image *img, int x, int y, int color);
+void init_buffer(t_data *mlx);
+
+
 #endif
