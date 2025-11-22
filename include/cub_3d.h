@@ -82,7 +82,7 @@ typedef struct s_walls
 {
     double corrected_dist;
     double distance_to_plane;
-    double wall_height;
+    int wall_height;
     int wall_start;
     int wall_end;
 }t_walls;

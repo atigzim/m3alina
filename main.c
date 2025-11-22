@@ -63,10 +63,10 @@ void move_player(t_data *data, int key)
         new_y += sin(data->player.angle + M_PI_2) * data->player.move_speed;
     }
 
-    // if (key == LEFT)
-    //     turn_left(data);
-    // else if (key == RIGHT)
-    //     turn_right(data);
+    if (key == LEFT)
+        turn_left(data);
+    else if (key == RIGHT)
+        turn_right(data);
 
     if (!tchick_wall(data, new_y, data->player.x))
         data->player.y = new_y;

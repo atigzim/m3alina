@@ -26,7 +26,7 @@ void cast_one_ray(t_data *data, int ray_index)
     ray->step_x = cos(ray->ray_angle);
     ray->step_y = sin(ray->ray_angle);
 
-    while ( iter < MAX_DESTINATIONS)
+    while (iter < MAX_DESTINATIONS)
     {
         ray->ray_x += ray->step_x;
         ray->ray_y += ray->step_y;
@@ -54,7 +54,7 @@ void render_walls(t_data *data)
 {
     int i;
     int y;
-    t_ray  *ray;
+    t_ray *ray;
     t_walls *wall;
 
     i = 0;
@@ -63,24 +63,25 @@ void render_walls(t_data *data)
     {
         ray = &data->rays[i];
         wall->corrected_dist = ray->distance *
-            cos(ray->ray_angle-data->player.angle);
-        wall->distance_to_plane = (WIN_WIDTH/2) / tan(FOV/2);
-        wall->wall_height =(TILE_SIZE / wall->corrected_dist)
-            * wall->distance_to_plane;
-        wall->wall_start =  (WIN_HEIGHT / 2) - (wall->wall_height/ 2);
-        wall->wall_end   = (WIN_HEIGHT / 2) + (wall->wall_height / 2);
-        if (wall->wall_start < 0) 
+                               cos(ray->ray_angle - data->player.angle);
+        wall->distance_to_plane = (WIN_WIDTH / 2) / tan(FOV / 2);
+        if (wall->corrected_dist <= 0.0001)
+            wall->corrected_dist = 0.0001;
+        wall->wall_height = (TILE_SIZE / wall->corrected_dist) * wall->distance_to_plane;
+        wall->wall_start = (WIN_HEIGHT / 2) - (wall->wall_height / 2);
+        wall->wall_end = (WIN_HEIGHT / 2) + (wall->wall_height / 2);
+        if (wall->wall_start < 0)
             wall->wall_start = 0;
         if (wall->wall_end >= WIN_HEIGHT)
             wall->wall_end = WIN_HEIGHT - 1;
-        y = wall->wall_start;;
-        while ( y <= wall->wall_end)
+        y = wall->wall_start;
+        while (y <= wall->wall_end)
         {
             my_mlx_pixel_put(&data->buffer, i, y, 0xAAAAAA);
             y++;
         }
         i++;
-    }   
+    }
 }
 void draw_C_F(t_data *data)
 {
@@ -130,6 +131,7 @@ void cast_all_rays(t_data *data)
     int i = 0;
     while (i < WIN_WIDTH)
     {
+        data->rays[i].ray_angle = data->player.angle - (FOV / 2) + (i * (FOV / (double)WIN_WIDTH));
         cast_one_ray(data, i);
         i++;
     }
