@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycast_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abhmidat <abhmidat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 09:46:07 by abhmidat          #+#    #+#             */
-/*   Updated: 2025/11/19 15:33:15 by abhmidat         ###   ########.fr       */
+/*   Updated: 2025/11/22 16:08:53 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,9 @@
 void cast_one_ray(t_data *data, int ray_index)
 {
     t_ray *ray = &data->rays[ray_index];
+    int iter;
 
-    int iter = 0;
+    iter = 0;
     ray->start_x = data->player.x;
     ray->start_y = data->player.y;
 
