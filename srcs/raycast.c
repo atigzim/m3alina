@@ -40,23 +40,6 @@ void init_rays(t_data *data)
         i++;
     }
 }
-
-void draw_player_position(t_data *data)
-{
-    int player_screen_x = (int)data->player.x;  // Already calculated in init_player
-    int player_screen_y = (int)data->player.y;
-    for (int i = -8; i <= 8; i++)
-    {
-        for (int j = -8; j <= 8; j++)
-        {
-            int px = player_screen_x + j;
-            int py = player_screen_y + i;
-            if (px >= 0 && px < WIN_WIDTH && py >= 0 && py < WIN_HEIGHT)
-                my_mlx_pixel_put(&data->buffer, px, py, 0xFFFFFF);
-        }
-    }
-}
-
 void draw_block(t_image *img, int x, int y, int cool)
 {
 	int i;

@@ -44,8 +44,8 @@ void cast_one_ray(t_data *data, int ray_index)
             ray->is_vertical_hit = (fabs(ray->step_x) > fabs(ray->step_y));
             return;
         }
-        my_mlx_pixel_put(&data->buffer,
-            (int)ray->ray_x, (int)ray->ray_y, 0x00FF00);
+        // my_mlx_pixel_put(&data->buffer,
+        //     (int)ray->ray_x, (int)ray->ray_y, 0x00FF00);
         iter++;
     }
 }
@@ -81,6 +81,26 @@ void render_walls(t_data *data)
         i++;
     }   
 }
+void draw_C_F(t_data *data)
+{
+    int i;
+    int y;
+
+    i = 0;
+    while (i < WIN_HEIGHT)
+    {
+        y = 0;
+        while (y < WIN_WIDTH)
+        {
+            if (i < WIN_HEIGHT / 2)
+                my_mlx_pixel_put(&data->buffer, y, i, 0x87CEEB);
+            else
+                my_mlx_pixel_put(&data->buffer, y, i, 0x78461E);
+            y++;
+        }
+        i++;
+    }
+}
 
 void draw_all(t_data *data)
 {
@@ -99,7 +119,8 @@ void draw_all(t_data *data)
         }
         i++;
     }
-    grid_lines(data);
+    // grid_lines(data);
+    draw_C_F(data);
     cast_all_rays(data);
     render_walls(data);
 }
