@@ -57,26 +57,46 @@ typedef struct s_image
 	int			width;
 	int			height;
 }    t_image;
+typedef struct s_ray_v
+{
+    double ray_x;
+    double ray_y;
+    double step_x;
+    double step_y;
+    int grid_x;
+    int grid_y;
+    double distance;
+    double dx;
+    double dy;
+    double start_x;
+    double start_y;
+} t_ray_v;
+
+typedef struct s_ray_h
+{
+    double ray_x;
+    double ray_y;
+    double step_x;
+    double step_y;
+    int grid_x;
+    int grid_y;
+    double distance;
+    double dx;
+    double dy;
+    double start_x;
+    double start_y;
+} t_ray_h;
 
 typedef struct s_ray
 {
-    double ray_angle;
-    double step_x;
-    double step_y;
     double distance;
-    double dy;
-    double dx;
-    double wall_hit_x;
-    double wall_hit_y;
-    double ray_x;
-    double ray_y;
-    int grid_x;
-    int grid_y;
-    double start_x;
-    double start_y;
-
+    double ray_angle;
+    t_ray_v ray_v;
+    t_ray_h ray_h;
     int is_vertical_hit;   // 1 = vertical wall, 0 = horizontal wall
 } t_ray;
+
+
 
 typedef struct s_walls
 {
