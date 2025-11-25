@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 09:46:07 by abhmidat          #+#    #+#             */
-/*   Updated: 2025/11/22 16:08:53 by marvin           ###   ########.fr       */
+/*   Updated: 2025/11/25 12:16:56 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,26 +141,26 @@ void render_walls(t_data *data)
         i++;
     }
 }
-// void draw_C_F(t_data *data)
-// {
-//     int i;
-//     int y;
+void draw_C_F(t_data *data)
+{
+    int i;
+    int y;
 
-//     i = 0;
-//     while (i < WIN_HEIGHT)
-//     {
-//         y = 0;
-//         while (y < WIN_WIDTH)
-//         {
-//             if (i < WIN_HEIGHT / 2)
-//                 my_mlx_pixel_put(&data->buffer, y, i, 0x87CEEB);
-//             else
-//                 my_mlx_pixel_put(&data->buffer, y, i, 0x78461E);
-//             y++;
-//         }
-//         i++;
-//     }
-// }
+    i = 0;
+    while (i < WIN_HEIGHT)
+    {
+        y = 0;
+        while (y < WIN_WIDTH)
+        {
+            if (i < WIN_HEIGHT / 2)
+                my_mlx_pixel_put(&data->buffer, y, i, 0x87CEEB);
+            else
+                my_mlx_pixel_put(&data->buffer, y, i, 0x78461E);
+            y++;
+        }
+        i++;
+    }
+}
 
 void draw_all(t_data *data)
 {
@@ -180,7 +180,7 @@ void draw_all(t_data *data)
         i++;
     }
     grid_lines(data);
-    // draw_C_F(data);
+    draw_C_F(data);
     cast_all_rays(data);
     render_walls(data); // <-- UNCOMMENTED: walls are now rendered
 }

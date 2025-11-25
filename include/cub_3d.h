@@ -47,6 +47,22 @@ typedef struct s_textures {
     char *east;
 } t_textures;
 
+typedef struct s_color {
+    int r;
+    int g;
+    int b;
+} t_color;
+
+typedef struct s_flags
+{
+   int	north;
+   int	south;
+   int	west;
+   int	east;
+   int	floor;
+   int	ceiling;
+}				t_flags;
+
 typedef struct s_image
 {
 	void		*img_ptr;
@@ -115,12 +131,14 @@ typedef struct s_data
     t_player player;
     t_ray    rays[WIN_WIDTH];
     t_walls wall;
+    t_flags flags;
+    t_color f_c_color;
 }   t_data;
 
 char	*get_next_line(int fd);
 char *strip_newline(char *line);
 bool	ft_isspace(char c);
-int	len_height(char *filename, t_data *data);
+int	len_height(char *filename, t_data *data, int *offset);
 bool	search_map(char *line);
 char	*skip_spacess(char *line);
 bool check_textures(char *line);
@@ -128,7 +146,7 @@ char *find_path(char *line, char *position, t_data *data);
 int parse_color_to_int(char *line, t_data *data);
 void	has_cub_extension(char *path_file, t_data *data);
 void    parse_cub(char *filename, t_data *data);
-void define_textures(t_data *data, int fd);
+void define_textures(t_data *data, int fd, int *offset);
 void free_all_and_print_error(t_data *data, char **map);
 char *padd_line(char *line, int len);
 char **new_map(t_data *data);
@@ -157,6 +175,6 @@ void cast_all_rays(t_data *data);
 void init_player(t_data *data);
 void my_mlx_pixel_put(t_image *img, int x, int y, int color);
 void init_buffer(t_data *mlx);
-
+int find_int(char *line);
 
 #endif

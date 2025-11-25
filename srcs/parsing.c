@@ -15,7 +15,7 @@ char *strip_newline(char *line)
 	return line;
 }
 
-int	len_height(char *filename, t_data *data)
+int	len_height(char *filename, t_data *data, int *offset)
 {
 	int		len;
 	char	*r_l_map;
@@ -30,9 +30,10 @@ int	len_height(char *filename, t_data *data)
 		exit(1);
 	}
 	r_l_map = get_next_line(fd);
-	while(r_l_map && !search_map(r_l_map))
+	while(r_l_map && !search_map(r_l_map) && offset)
 	{
 		free(r_l_map);
+		(*offset)--;
 		r_l_map = get_next_line(fd);
 	}
 	while (r_l_map && search_map(r_l_map))
@@ -87,26 +88,79 @@ bool	ft_isspace(char c)
 
 int parse_color_to_int(char *line, t_data *data)
 {
-    int r, g, b;
     int i = 0;
     
     if (*line == 'C' || *line == 'F')
         line++;
     line = skip_spacess(line);
-    r = ft_atoi(line);
-    if (r < 0 || r > 255)
+    data->f_c_color.r = ft_atoi(line);
+    if (data->f_c_color.r < 0 || data->f_c_color.r > 255)
         free_all_and_print_error(data, NULL);
     while (line[i] && line[i] != ',')
         i++;
     i++; 
-    g = ft_atoi(line + i);
-    if (g < 0 || g > 255)
+    data->f_c_color.g = ft_atoi(line + i);
+    if (data->f_c_color.g < 0 || data->f_c_color.g > 255)
         free_all_and_print_error(data, NULL);
     while (line[i] && line[i] != ',')
         i++;
     i++;
-    b = ft_atoi(line + i);
-    if (b < 0 || b > 255)
+    data->f_c_color.b = ft_atoi(line + i);
+    if (data->f_c_color.b < 0 || data->f_c_color.b > 255)
         free_all_and_print_error(data, NULL);
-    return (r << 16 | g << 8 | b);
+    return (data->f_c_color.r << 16 | data->f_c_color.g << 8 | data->f_c_color.b);
+}
+
+int find_int(char *line)
+{
+	int i;
+	int j;
+	int flag;	
+
+	i = 0;
+	flag = 0;
+	if (!line)
+		return(0);
+	while (*line && *line != '\n')
+	{
+		if (!ft_strncmp("C", line, 1) || !ft_strncmp("F", line, 1))
+		{
+			line++;
+			line = skip_spacess(line);
+		}
+		if (ft_isdigit(*line))
+		{
+			while(line[i])
+			{
+				j = i;
+				while(line[j] && ft_isdigit(line[j]))
+					j++;
+				printf("num: %d\n", ft_atoi(ft_substr(line, i, j - i)));
+				if(ft_atoi(ft_substr(line, i, j - i)) < 0 || 
+					ft_atoi(ft_substr(line, i, j - i)) > 255)
+				{
+					printf("errrrrrr\n");
+					exit(1);
+				}
+				i = j;
+				if(line[i] == ',')
+					flag++;
+				if(!ft_isspace(line[i]) && line[i] != ',')
+				{
+					printf("errrrrrr\n");
+					exit(1);
+				}
+				i++;
+				if(flag >= 2)
+					exit(1);
+			}
+			return(1);
+		}
+		else
+		{
+			printf("errrrrrr\n");
+			exit(1);
+		}
+	}
+	return(0);
 }

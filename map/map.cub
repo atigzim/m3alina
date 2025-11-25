@@ -5,6 +5,8 @@ NO textures/wolfenstein/mossy.xpm
 SO textures/wolfenstein/color_stone.xpm
 WE textures/wolfenstein/eagle.xpm
 EA textures/wolfenstein/grey_stone.xpm
+
+C 139,0,12
         1111111111111111111111111
         1110000001100000100000001
         1111000001110000000000001

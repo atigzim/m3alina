@@ -103,7 +103,9 @@ int	sed(void *param)
 void parse_cub(char *filename, t_data *data)
 {
     int fd;
+    int offset;
 
+    offset = 0;
     has_cub_extension(filename, data);
     fd = open(filename, O_RDONLY);
 	if (fd == -1)
@@ -111,8 +113,10 @@ void parse_cub(char *filename, t_data *data)
 		printf("Error\nCannot open .cub file\n");
 		exit(1);
 	}
-	define_textures(data, fd);
-	data->map_height = len_height(filename, data);
+    printf("Offset before define_textures: %d\n", offset);
+	define_textures(data, fd, &offset);
+	printf("Offset after define_textures: %d\n", offset);
+	data->map_height = len_height(filename, data, &offset);
     add_map_line(data, filename);
 	map_valid(new_map(data), data);
 	close(fd);
