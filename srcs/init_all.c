@@ -33,3 +33,13 @@ void init_player(t_data *data)
     else
      data->player.angle = 0;
 }
+
+void init_rays(t_data *data)
+{
+    int i = 0;
+    while (i < WIN_WIDTH)
+    {
+        data->rays[i].ray_angle = data->player.angle - (FOV / 2) + (i * (FOV / WIN_WIDTH));
+        i++;
+    }
+}

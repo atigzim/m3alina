@@ -14,10 +14,16 @@ void map_valid(char **map, t_data *data)
 		while (map[i][j])
 		{
 			if(check_wall(data, ft_strlen(map[i]), i, j))
-				if(map[i][j] != '1' && !ft_isspace(map[i][j]) )
-					free_all_and_print_error(data, map);
+				if(map[i][j] != '1' && !ft_isspace(map[i][j]))
+				{
+					free_all_and_print_error(data, map, NULL);
+					printf("Error\nMap is not closed\n");
+				}
 			if (check_out(map, i, j))
-				free_all_and_print_error(data, map);
+			{
+				printf("Error\nMap is not closed\n");
+				free_all_and_print_error(data, map, NULL);
+			}
 			if(map[i][j] != ' ')
 				check_valid_character(map[i][j], data, map);
 			if(map[i][j] == 'N' || map[i][j] == 'S' || map[i][j] == 'E' || map[i][j] == 'W')
@@ -32,7 +38,11 @@ void map_valid(char **map, t_data *data)
 		i++;
 	}
 	if (flag != 1)
-		free_all_and_print_error(data, map);
+	{
+		printf("Error\nInvalid number of player start positions\n");
+		free_all_and_print_error(data, map, NULL);
+	}
+	free_map(map);
 }
 
 bool search_map(char *line)

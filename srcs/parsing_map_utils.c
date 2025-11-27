@@ -1,12 +1,19 @@
 #include "../include/cub_3d.h"
 
-char *padd_line(char *line, int len)
+char *padd_line(char *line, int len, t_data *data, char **ne_map)
 {
 	int i;
 	char *new_line;
 
 	i = 0;
 	new_line = malloc(len + 1);
+	if(!new_line)
+	{
+		free_map(ne_map);
+		free_data(data);
+		// free(line);
+		return(NULL);
+	}
 	ft_bzero(new_line, len + 1);
 	while(i < len)
 	{
@@ -17,10 +24,11 @@ char *padd_line(char *line, int len)
 		i++;
 	}
 	new_line[i] = '\0';
+	// free(line);
 	return(new_line);
 }
 
-char **new_map(t_data *data)
+char **new_map(t_data *data, int fd)
 {
 	char **new_map;
 	int i;
@@ -28,14 +36,23 @@ char **new_map(t_data *data)
 	i = 0;
 	new_map = malloc(sizeof(char *) * (data->map_height + 1));
 	if(!new_map)
+	{
+		close(fd);
+		free_data(data);
 		return(NULL);
+	}
 	while(data->map[i])
 	{
 		new_map[i] = malloc(sizeof(char) * (data->map_width + 1));
 		if(!new_map[i])
+		{
+			close(fd);
+			free_map(new_map);
+			free_data(data);
 			return(NULL);
+		}
 		ft_bzero(new_map[i], sizeof(char) * (data->map_width));
-		new_map[i] = padd_line(data->map[i], data->map_width);
+		new_map[i] = padd_line(data->map[i], data->map_width, data, new_map);
 		i++;
 	}
 	new_map[i] = NULL;
@@ -62,5 +79,8 @@ void check_valid_character(char c, t_data *data, char **map)
 {
 	if (c != '0' && c != '1' && c != 'N'
 		&& c != 'S' && c != 'E' && c != 'W')
-		free_all_and_print_error(data, map);
+		{
+			printf("Error\nInvalid character in map\n");
+			free_all_and_print_error(data, map, NULL);
+		}
 }

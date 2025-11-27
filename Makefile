@@ -12,6 +12,7 @@ SRC = main.c \
 	  srcs/raycast.c \
 	  srcs/raycast_utils.c \
 	  srcs/init_all.c \
+	  srcs/move_player.c \
 
 OBJ = $(SRC:.c=.o)
 

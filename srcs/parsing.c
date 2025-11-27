@@ -25,7 +25,7 @@ int	len_height(char *filename, t_data *data, int *offset)
 	fd = open(filename, O_RDONLY);
 	if (fd == -1)
 	{
-		//free_all
+		free_all_and_print_error(data, NULL, NULL);
 		printf("Error\nCannot open .cub file\n");
 		exit(1);
 	}
@@ -85,82 +85,62 @@ bool	ft_isspace(char c)
 		|| c == '\r');
 }
 
-
-int parse_color_to_int(char *line, t_data *data)
+bool parse_color_textue(char *line)
 {
-    int i = 0;
-    
+	int i;
+	int flag;
+
+	i = 0;
+	flag = 0;
+	while (line[i])
+	{
+		if(line[i] == ',')
+			flag++;
+		i++;
+	}
+	if (flag != 2)
+		return (false);
+	return (true);
+}
+
+int parse_color_to_int(char *line, t_data *data, char *original_line)
+{
+    int i ;
+
+	i = 0;
+	if (!parse_color_textue(line))
+	{
+		printf("Error\nInvalid color format\n");
+		free_all_and_print_error(data, NULL, original_line);
+	}
     if (*line == 'C' || *line == 'F')
         line++;
     line = skip_spacess(line);
     data->f_c_color.r = ft_atoi(line);
     if (data->f_c_color.r < 0 || data->f_c_color.r > 255)
-        free_all_and_print_error(data, NULL);
+	{
+		printf("Error\nInvalid color format\n");
+		free_all_and_print_error(data, NULL, original_line);
+	}
     while (line[i] && line[i] != ',')
         i++;
     i++; 
     data->f_c_color.g = ft_atoi(line + i);
     if (data->f_c_color.g < 0 || data->f_c_color.g > 255)
-        free_all_and_print_error(data, NULL);
+	{
+		printf("Error\nInvalid color format\n");
+		free_all_and_print_error(data, NULL, original_line);
+	}
     while (line[i] && line[i] != ',')
         i++;
     i++;
     data->f_c_color.b = ft_atoi(line + i);
     if (data->f_c_color.b < 0 || data->f_c_color.b > 255)
-        free_all_and_print_error(data, NULL);
+	{
+		printf("Error\nInvalid color format\n");
+		free_all_and_print_error(data, NULL, original_line);
+	}
     return (data->f_c_color.r << 16 | data->f_c_color.g << 8 | data->f_c_color.b);
 }
 
-int find_int(char *line)
-{
-	int i;
-	int j;
-	int flag;	
 
-	i = 0;
-	flag = 0;
-	if (!line)
-		return(0);
-	while (*line && *line != '\n')
-	{
-		if (!ft_strncmp("C", line, 1) || !ft_strncmp("F", line, 1))
-		{
-			line++;
-			line = skip_spacess(line);
-		}
-		if (ft_isdigit(*line))
-		{
-			while(line[i])
-			{
-				j = i;
-				while(line[j] && ft_isdigit(line[j]))
-					j++;
-				printf("num: %d\n", ft_atoi(ft_substr(line, i, j - i)));
-				if(ft_atoi(ft_substr(line, i, j - i)) < 0 || 
-					ft_atoi(ft_substr(line, i, j - i)) > 255)
-				{
-					printf("errrrrrr\n");
-					exit(1);
-				}
-				i = j;
-				if(line[i] == ',')
-					flag++;
-				if(!ft_isspace(line[i]) && line[i] != ',')
-				{
-					printf("errrrrrr\n");
-					exit(1);
-				}
-				i++;
-				if(flag >= 2)
-					exit(1);
-			}
-			return(1);
-		}
-		else
-		{
-			printf("errrrrrr\n");
-			exit(1);
-		}
-	}
-	return(0);
-}

@@ -79,16 +79,18 @@ typedef struct s_ray
 {
     double distance;
     double ray_angle;
+    int map_x ;
+    int map_y ;
     double ray_x;
     double ray_y;
     double step_x;
     double step_y;
-    int grid_x;
-    int grid_y;
+    double side_dist_x; 
+    double side_dist_y;
+    double delta_dist_x;
+    double delta_dist_y;
     double dx;
     double dy;
-    double start_x;
-    double start_y;
     int is_vertical_hit;   // 1 = vertical wall, 2 = horizontal wall
 } t_ray;
 
@@ -135,6 +137,7 @@ typedef struct s_data
     t_color f_c_color;
 }   t_data;
 
+//parsing
 char	*get_next_line(int fd);
 char *strip_newline(char *line);
 bool	ft_isspace(char c);
@@ -142,39 +145,40 @@ int	len_height(char *filename, t_data *data, int *offset);
 bool	search_map(char *line);
 char	*skip_spacess(char *line);
 bool check_textures(char *line);
-char *find_path(char *line, char *position, t_data *data);
-int parse_color_to_int(char *line, t_data *data);
+char *find_path(char *line, char *position, t_data *data, char *original_line);
+int parse_color_to_int(char *line, t_data *data, char *original_line);
 void	has_cub_extension(char *path_file, t_data *data);
 void    parse_cub(char *filename, t_data *data);
 void define_textures(t_data *data, int fd, int *offset);
-void free_all_and_print_error(t_data *data, char **map);
-char *padd_line(char *line, int len);
-char **new_map(t_data *data);
+void free_all_and_print_error(t_data *data, char **map, char *line);
+char *padd_line(char *line, int len, t_data *data, char **ne_map);
+char **new_map(t_data *data, int fd);
 void map_valid(char **map, t_data *data);
 void add_map_line(t_data *data, char *filename);
 bool check_wall(t_data *data, int lne, int i, int j);
 bool check_out(char **map, int i, int j);
 void check_valid_character(char c, t_data *data, char **map);
 
-//raycast
-
-void cast_rays(t_data *data);
-int pos_is_wall(t_data *data, double dx, double dy);
-int direction_check(double angle, char c);
-int view_check(double angle, double *inter, double *step, int is_horz);
-double update_angle(double angle);
-double calc_distance(double x1, double x2, double y1, double y2);
-void draw_3d_wall_strip(t_data *data, int strip_id);
-void grid_lines(t_data *data);
-void init_rays(t_data *data);
-void draw_block(t_image *img, int x, int y, int cool);
-void cast_one_ray(t_data *data, int ray_index);
-void render_walls(t_data *data);
-void draw_all(t_data *data);
-void cast_all_rays(t_data *data);
-void init_player(t_data *data);
 void my_mlx_pixel_put(t_image *img, int x, int y, int color);
+//raycasting
+void grid_lines(t_data *data);
+void draw_block(t_image *img, int x, int y, int cool);
+void draw_all(t_data *data);
+//cast rays
+void cast_one_ray(t_data *data, int ray_index);
+void cast_all_rays(t_data *data);
+void render_walls(t_data *data);
+//init all
+void init_player(t_data *data);
+void init_rays(t_data *data);
 void init_buffer(t_data *mlx);
-int find_int(char *line);
+//move player
+bool tchick_wall(t_data *data, double y, double x);
+void move_player(t_data *data, int key);
+void turn_left(t_data *data);
+void turn_right(t_data *data);
+//free all
+void free_data(t_data *data);
+void free_map(char **map);
 
 #endif

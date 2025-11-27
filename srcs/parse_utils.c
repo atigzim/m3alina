@@ -55,20 +55,19 @@ int duplicate_path(char *position, t_data *data)
 	return (1);
 }
 
-char *find_path(char *line, char *position, t_data *data)
+char *find_path(char *line, char *position, t_data *data, char *original_line)
 {
 	if(duplicate_path(position, data))
 	{
 		printf("Error\nDuplicate texture path\n");
-		free_all_and_print_error(data, NULL);
+		free_all_and_print_error(data, NULL, original_line);
 	}
 	if (!ft_strncmp(position, line, 2))
 		line +=2;
 	if (!ft_isspace(*line))
 	{
 		printf("Error\nInvalid texture path\n");
-		free(line);
-		free_all_and_print_error(data, NULL);
+		free_all_and_print_error(data, NULL, original_line);
 	}
 	line = skip_spacess(line);
 	strip_newline(line);
@@ -77,24 +76,28 @@ char *find_path(char *line, char *position, t_data *data)
 
 void pars_textures(char *line, t_data *data, int *offset)
 {
+
+	char *original_line;
+
 	if(!line)
 		return;
+	original_line = line;
 	line = skip_spacess(line);
 	if(check_textures(line))
 	{
 		(*offset)++;
 		if(!ft_strncmp("NO", line, 2))
-			data->textures.north = ft_strdup(find_path(line, "NO", data));
+			data->textures.north = ft_strdup(find_path(line, "NO", data, original_line));
 		else if(!ft_strncmp("SO", line, 2))
-			data->textures.south = ft_strdup(find_path(line, "SO", data));
+			data->textures.south = ft_strdup(find_path(line, "SO", data, original_line));
 		else if(!ft_strncmp("WE", line, 2))
-			data->textures.west = ft_strdup(find_path(line, "WE", data));
+			data->textures.west = ft_strdup(find_path(line, "WE", data, original_line));
 		else if(!ft_strncmp("EA", line, 2))
-			data->textures.east = ft_strdup(find_path(line, "EA", data));
+			data->textures.east = ft_strdup(find_path(line, "EA", data, original_line));
 		else if (!ft_strncmp("C", line, 1))
-			data->ceiling_color = parse_color_to_int(line, data);
+			data->ceiling_color = parse_color_to_int(line, data, original_line);
 		else if (!ft_strncmp("F", line, 1))
-			data->floor_color = parse_color_to_int(line, data);
+			data->floor_color = parse_color_to_int(line, data, original_line);
 	}
 }
 
@@ -114,17 +117,16 @@ void define_textures(t_data *data, int fd, int *offset)
 			break;
 		if(!line)
 			break;
-		
 		line = get_next_line(fd);
 	}
-	free(line);
 	if(*offset < 6 || *offset > 6 || !data->textures.north || !data->textures.south
 		|| !data->textures.west || !data->textures.east
 		|| data->floor_color == 0 || data->ceiling_color == 0)
 	{
 		printf("Error\nInvalid texture or color definition\n");
-		free_all_and_print_error(data, NULL);
+		free_all_and_print_error(data, NULL, line);
 	}
 	close(fd);
+
 }
 

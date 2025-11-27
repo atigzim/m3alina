@@ -15,98 +15,74 @@
 void cast_one_ray(t_data *data, int ray_index)
 {
     t_ray *ray = &data->rays[ray_index];
-
-    double ray_angle = ray->ray_angle;
-    double ray_dir_x = cos(ray_angle);
-    double ray_dir_y = sin(ray_angle);
-
-    int map_x = (int)(data->player.x / TILE_SIZE);
-    int map_y = (int)(data->player.y / TILE_SIZE);
-
-    double side_dist_x;
-    double side_dist_y;
-
-    double delta_dist_x = fabs(1 / ray_dir_x);
-    double delta_dist_y = fabs(1 / ray_dir_y);
-
-    int step_x;
-    int step_y;
     int hit = 0;
-    int side; // 0 = vertical, 1 = horizontal
+    int side = 0;
+
+    ray->dx = cos(ray->ray_angle);
+    ray->dy = sin(ray->ray_angle);
+
+    ray->map_x = (int)(data->player.x / TILE_SIZE);
+    ray->map_y = (int)(data->player.y / TILE_SIZE);
+
+    // Use world units for delta distances
+    ray->delta_dist_x = fabs(TILE_SIZE / ray->dx);
+    ray->delta_dist_y = fabs(TILE_SIZE / ray->dy);
 
     // Calculate step and initial sideDist
-    if (ray_dir_x < 0)
+    if (ray->dx < 0)
     {
-        step_x = -1;
-        side_dist_x = (data->player.x - map_x * TILE_SIZE) * delta_dist_x / TILE_SIZE;
+        ray->step_x = -1;
+        ray->side_dist_x = (data->player.x - ray->map_x * TILE_SIZE) / fabs(ray->dx);
     }
     else
     {
-        step_x = 1;
-        side_dist_x = ((map_x + 1) * TILE_SIZE - data->player.x) * delta_dist_x / TILE_SIZE;
+        ray->step_x = 1;
+        ray->side_dist_x = ((ray->map_x + 1) * TILE_SIZE - data->player.x) / fabs(ray->dx);
     }
-    if (ray_dir_y < 0)
+    if (ray->dy < 0)
     {
-        step_y = -1;
-        side_dist_y = (data->player.y - map_y * TILE_SIZE) * delta_dist_y / TILE_SIZE;
+        ray->step_y = -1;
+        ray->side_dist_y = (data->player.y - ray->map_y * TILE_SIZE) / fabs(ray->dy);
     }
     else
     {
-        step_y = 1;
-        side_dist_y = ((map_y + 1) * TILE_SIZE - data->player.y) * delta_dist_y / TILE_SIZE;
+        ray->step_y = 1;
+        ray->side_dist_y = ((ray->map_y + 1) * TILE_SIZE - data->player.y) / fabs(ray->dy);
     }
 
-    // DDA loop
     while (!hit)
     {
-        if (side_dist_x < side_dist_y)
+        if (ray->side_dist_x < ray->side_dist_y)
         {
-            side_dist_x += delta_dist_x;
-            map_x += step_x;
+            ray->map_x += ray->step_x;
             side = 0;
+            ray->side_dist_x += ray->delta_dist_x;
         }
         else
         {
-            side_dist_y += delta_dist_y;
-            map_y += step_y;
+            ray->map_y += ray->step_y;
             side = 1;
+            ray->side_dist_y += ray->delta_dist_y;
         }
-        if (map_y < 0 || map_y >= data->map_height ||
-            map_x < 0 || map_x >= (int)ft_strlen(data->map[map_y]))
+        if (ray->map_y < 0 || ray->map_y >= data->map_height ||
+            ray->map_x < 0 || ray->map_x >= (int)ft_strlen(data->map[ray->map_y]))
             break;
-        if (data->map[map_y][map_x] == '1')
+        if (data->map[ray->map_y][ray->map_x] == '1')
             hit = 1;
     }
 
-    // Calculate distance to wall
-    double perp_wall_dist;
+    // Calculate perpendicular distance to wall
     if (hit)
     {
         if (side == 0)
-            perp_wall_dist = (side_dist_x - delta_dist_x) * TILE_SIZE;
+            ray->distance = ray->side_dist_x - ray->delta_dist_x;
         else
-            perp_wall_dist = (side_dist_y - delta_dist_y) * TILE_SIZE;
-        ray->distance = perp_wall_dist;
+            ray->distance = ray->side_dist_y - ray->delta_dist_y;
         ray->is_vertical_hit = (side == 0);
-        // Optionally store hit position:
-        ray->ray_x = data->player.x + ray->distance * ray_dir_x;
-        ray->ray_y = data->player.y + ray->distance * ray_dir_y;
+        ray->ray_x = data->player.x + ray->distance * ray->dx;
+        ray->ray_y = data->player.y + ray->distance * ray->dy;
     }
 }
-// void walls_parameters(t_ray *ray)
-// {
-//     int iter;
-
-//     iter = 0;
-//     while(iter < WIN_WIDTH - 2)
-//     {
-//         if (ray[iter].is_vertical_hit == 1 && ray[iter + 2].is_vertical_hit == 2)
-//         {
-            
-//         }
-//         iter++;
-//     }
-// }
 void render_walls(t_data *data)
 {
     int i;
@@ -179,10 +155,10 @@ void draw_all(t_data *data)
         }
         i++;
     }
-    grid_lines(data);
+    // grid_lines(data);
     draw_C_F(data);
     cast_all_rays(data);
-    render_walls(data); // <-- UNCOMMENTED: walls are now rendered
+    render_walls(data); 
 }
 void cast_all_rays(t_data *data)
 {

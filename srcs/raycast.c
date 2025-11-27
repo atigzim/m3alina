@@ -31,16 +31,7 @@ void grid_lines(t_data *data)
         x ++;
     }
 }
-void init_rays(t_data *data)
-{
-    int i = 0;
-    while (i < WIN_WIDTH)
-    {
-        data->rays[i].ray_angle = data->player.angle - (FOV / 2) + (i * (FOV / WIN_WIDTH));
-        printf("nsbat ray %f\n", i*(FOV / WIN_WIDTH));
-        i++;
-    }
-}
+
 void draw_block(t_image *img, int x, int y, int cool)
 {
 	int i;
