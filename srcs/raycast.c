@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycast.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abhmidat <abhmidat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 15:05:47 by abhmidat          #+#    #+#             */
-/*   Updated: 2025/11/19 15:33:17 by abhmidat         ###   ########.fr       */
+/*   Updated: 2025/11/26 13:29:32 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ void init_rays(t_data *data)
     while (i < WIN_WIDTH)
     {
         data->rays[i].ray_angle = data->player.angle - (FOV / 2) + (i * (FOV / WIN_WIDTH));
+        printf("nsbat ray %f\n", i*(FOV / WIN_WIDTH));
         i++;
     }
 }

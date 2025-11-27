@@ -91,9 +91,9 @@ void pars_textures(char *line, t_data *data, int *offset)
 			data->textures.west = ft_strdup(find_path(line, "WE", data));
 		else if(!ft_strncmp("EA", line, 2))
 			data->textures.east = ft_strdup(find_path(line, "EA", data));
-		else if (!ft_strncmp("C", line, 1) && find_int(line))
+		else if (!ft_strncmp("C", line, 1))
 			data->ceiling_color = parse_color_to_int(line, data);
-		else if (!ft_strncmp("F", line, 1) && find_int(line))
+		else if (!ft_strncmp("F", line, 1))
 			data->floor_color = parse_color_to_int(line, data);
 	}
 }
@@ -103,7 +103,6 @@ void define_textures(t_data *data, int fd, int *offset)
 	char *line;
 
 	line = get_next_line(fd);
-	printf("Initial offset in define_textures: %d\n", *offset);
 	while (line)
 	{
 		if (*offset <= 6)
@@ -119,9 +118,9 @@ void define_textures(t_data *data, int fd, int *offset)
 		line = get_next_line(fd);
 	}
 	free(line);
-	if(*offset < 6 || !data->flags.north || !data->flags.south
-		|| !data->flags.west || !data->flags.east
-		|| !data->flags.floor || !data->flags.ceiling || *offset > 6)
+	if(*offset < 6 || *offset > 6 || !data->textures.north || !data->textures.south
+		|| !data->textures.west || !data->textures.east
+		|| data->floor_color == 0 || data->ceiling_color == 0)
 	{
 		printf("Error\nInvalid texture or color definition\n");
 		free_all_and_print_error(data, NULL);
