@@ -1,34 +1,25 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   raycast.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/18 15:05:47 by abhmidat          #+#    #+#             */
-/*   Updated: 2025/11/26 13:29:32 by marvin           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../include/cub_3d.h"
 
 void grid_lines(t_data *data)
 {
-    int x = 0;
-    int y = 0;
+    int x;
+    int y ;
 
-    while(x < WIN_WIDTH)
+    x = 0;
+    y = 0;
+
+    while(y < WIN_HEIGHT)
     {
-        y = 0;
-        while(y < WIN_HEIGHT)
+        x = 0;
+        while(x <  WIN_WIDTH)
         {
             if(x % TILE_SIZE == 0 || y % TILE_SIZE == 0)
                 my_mlx_pixel_put(&data->buffer, x, y, 0xFFFFFF);
             if(x == (int)data->player.x && y == (int)data->player.y)
                 draw_block(&data->buffer, x - 2, y - 2, 0xFF0000);
-            y ++;
+            x++;
         }
-        x ++;
+        y ++;
     }
 }
 

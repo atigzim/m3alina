@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycast_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: atigzim <atigzim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 09:46:07 by abhmidat          #+#    #+#             */
-/*   Updated: 2025/11/25 12:16:56 by marvin           ###   ########.fr       */
+/*   Updated: 2025/11/28 15:23:46 by atigzim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,18 @@
 
 void cast_one_ray(t_data *data, int ray_index)
 {
-    t_ray *ray = &data->rays[ray_index];
-    int hit = 0;
-    int side = 0;
+    t_ray *ray;
+    int hit;
+    ray = &data->rays[ray_index];
+    
 
+    hit = 0;
     ray->dx = cos(ray->ray_angle);
     ray->dy = sin(ray->ray_angle);
-
     ray->map_x = (int)(data->player.x / TILE_SIZE);
     ray->map_y = (int)(data->player.y / TILE_SIZE);
-
-    // Use world units for delta distances
     ray->delta_dist_x = fabs(TILE_SIZE / ray->dx);
     ray->delta_dist_y = fabs(TILE_SIZE / ray->dy);
-
-    // Calculate step and initial sideDist
     if (ray->dx < 0)
     {
         ray->step_x = -1;
@@ -55,13 +52,13 @@ void cast_one_ray(t_data *data, int ray_index)
         if (ray->side_dist_x < ray->side_dist_y)
         {
             ray->map_x += ray->step_x;
-            side = 0;
+            ray->is_vertical_hit = 0;
             ray->side_dist_x += ray->delta_dist_x;
         }
         else
         {
             ray->map_y += ray->step_y;
-            side = 1;
+            ray->is_vertical_hit = 1; // FIXED: was data->rays->is_vertical_hit = 1;
             ray->side_dist_y += ray->delta_dist_y;
         }
         if (ray->map_y < 0 || ray->map_y >= data->map_height ||
@@ -74,11 +71,11 @@ void cast_one_ray(t_data *data, int ray_index)
     // Calculate perpendicular distance to wall
     if (hit)
     {
-        if (side == 0)
+        if (ray->is_vertical_hit == 0)
             ray->distance = ray->side_dist_x - ray->delta_dist_x;
         else
             ray->distance = ray->side_dist_y - ray->delta_dist_y;
-        ray->is_vertical_hit = (side == 0);
+        ray->is_vertical_hit = (data->rays[ray_index].is_vertical_hit == 0);
         ray->ray_x = data->player.x + ray->distance * ray->dx;
         ray->ray_y = data->player.y + ray->distance * ray->dy;
     }

@@ -158,6 +158,9 @@ void add_map_line(t_data *data, char *filename);
 bool check_wall(t_data *data, int lne, int i, int j);
 bool check_out(char **map, int i, int j);
 void check_valid_character(char c, t_data *data, char **map);
+void player_position(t_data *data, int i, int j);
+void	pars_textures(char *line, t_data *data, int *offset);
+void	one_line_map(t_data *data, int fd, char *line);
 
 void my_mlx_pixel_put(t_image *img, int x, int y, int color);
 //raycasting

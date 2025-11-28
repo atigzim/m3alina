@@ -1,109 +1,87 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_utils.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: atigzim <atigzim@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/28 12:24:33 by atigzim           #+#    #+#             */
+/*   Updated: 2025/11/28 16:14:10 by atigzim          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/cub_3d.h"
 
-bool check_textures(char *line)
-{
-	if (!ft_strncmp("NO", line, 2) || !ft_strncmp("SO", line, 2)
-			|| !ft_strncmp("WE", line, 2) || !ft_strncmp("EA", line, 2)
-			|| !ft_strncmp("F", line, 1)|| !ft_strncmp("C", line, 1))
-			return(true);
-	return (false);
-}
-
-char *skip_spacess(char *str )
+char	*skip_spacess(char *str)
 {
 	int	i;
 
 	i = 0;
 	if (!str)
-		return(NULL);
+		return (NULL);
 	while (str && str[i] && ft_isspace(str[i]))
 		i++;
 	return (str + i);
 }
-int duplicate_path(char *position, t_data *data)
+
+void	map_valid(char **map, t_data *data)
 {
-	if (!ft_strncmp("NO", position, 2) && !data->flags.north)
+	int (i), (j), (flag);
+	i = 0;
+	flag = 0;
+	while (map[i])
 	{
-		data->flags.north = 1;
-		return (0);
+		j = 0;
+		while (map[i][j])
+		{
+			check_valid_character(map[i][j], data, map);
+			if (map[i][j] == 'N' || map[i][j] == 'S' || map[i][j] == 'E'
+				|| map[i][j] == 'W')
+			{
+				player_position(data, i, j);
+				flag++;
+			}
+			j++;
+		}
+		i++;
 	}
-	else if (!ft_strncmp("SO", position, 2) && !data->flags.south)
+	if (flag != 1)
 	{
-		data->flags.south = 1;
-		return (0);
+		printf("Error\nInvalid number of player start positions\n");
+		free_all_and_print_error(data, map, NULL);
 	}
-	else if (!ft_strncmp("WE", position, 2) && !data->flags.west)
-	{
-		data->flags.west = 1;
-		return (0);
-	}
-	else if (!ft_strncmp("EA", position, 2) && !data->flags.east)
-	{
-		data->flags.east = 1;
-		return (0);
-	}
-	else if (!ft_strncmp("F", position, 1) && !data->flags.floor)
-	{
-		data->flags.floor = 1;
-		return (0);
-	}
-	else if (!ft_strncmp("C", position, 1) && !data->flags.ceiling)
-	{
-		data->flags.ceiling = 1;
-		return (0);
-	}
-	return (1);
+	free_map(map);
 }
 
-char *find_path(char *line, char *position, t_data *data, char *original_line)
+void	pars_textures(char *line, t_data *data, int *offset)
 {
-	if(duplicate_path(position, data))
-	{
-		printf("Error\nDuplicate texture path\n");
-		free_all_and_print_error(data, NULL, original_line);
-	}
-	if (!ft_strncmp(position, line, 2))
-		line +=2;
-	if (!ft_isspace(*line))
-	{
-		printf("Error\nInvalid texture path\n");
-		free_all_and_print_error(data, NULL, original_line);
-	}
+	char		*orig;
+
+	if (!line)
+		return ;
+	orig = line;
 	line = skip_spacess(line);
-	strip_newline(line);
-	return (line);
-}
-
-void pars_textures(char *line, t_data *data, int *offset)
-{
-
-	char *original_line;
-
-	if(!line)
-		return;
-	original_line = line;
-	line = skip_spacess(line);
-	if(check_textures(line))
+	if (check_textures(line))
 	{
 		(*offset)++;
-		if(!ft_strncmp("NO", line, 2))
-			data->textures.north = ft_strdup(find_path(line, "NO", data, original_line));
-		else if(!ft_strncmp("SO", line, 2))
-			data->textures.south = ft_strdup(find_path(line, "SO", data, original_line));
-		else if(!ft_strncmp("WE", line, 2))
-			data->textures.west = ft_strdup(find_path(line, "WE", data, original_line));
-		else if(!ft_strncmp("EA", line, 2))
-			data->textures.east = ft_strdup(find_path(line, "EA", data, original_line));
+		if (!ft_strncmp("NO", line, 2))
+			data->textures.north = ft_strdup(find_path(line, "NO", data, orig));
+		else if (!ft_strncmp("SO", line, 2))
+			data->textures.south = ft_strdup(find_path(line, "SO", data, orig));
+		else if (!ft_strncmp("WE", line, 2))
+			data->textures.west = ft_strdup(find_path(line, "WE", data, orig));
+		else if (!ft_strncmp("EA", line, 2))
+			data->textures.east = ft_strdup(find_path(line, "EA", data, orig));
 		else if (!ft_strncmp("C", line, 1))
-			data->ceiling_color = parse_color_to_int(line, data, original_line);
+			data->ceiling_color = parse_color_to_int(line, data, orig);
 		else if (!ft_strncmp("F", line, 1))
-			data->floor_color = parse_color_to_int(line, data, original_line);
+			data->floor_color = parse_color_to_int(line, data, orig);
 	}
 }
 
-void define_textures(t_data *data, int fd, int *offset)
+void	define_textures(t_data *data, int fd, int *offset)
 {
-	char *line;
+	char	*line;
 
 	line = get_next_line(fd);
 	while (line)
@@ -114,19 +92,17 @@ void define_textures(t_data *data, int fd, int *offset)
 			free(line);
 		}
 		else
-			break;
-		if(!line)
-			break;
+			break ;
+		if (!line)
+			break ;
 		line = get_next_line(fd);
 	}
-	if(*offset < 6 || *offset > 6 || !data->textures.north || !data->textures.south
-		|| !data->textures.west || !data->textures.east
+	if (*offset < 6 || *offset > 6 || !data->textures.north
+		|| !data->textures.south || !data->textures.west || !data->textures.east
 		|| data->floor_color == 0 || data->ceiling_color == 0)
 	{
 		printf("Error\nInvalid texture or color definition\n");
 		free_all_and_print_error(data, NULL, line);
 	}
 	close(fd);
-
 }
-

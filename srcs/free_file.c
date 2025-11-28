@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   free_file.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: atigzim <atigzim@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/28 12:08:20 by atigzim           #+#    #+#             */
+/*   Updated: 2025/11/28 12:28:51 by atigzim          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/cub_3d.h"
 
-void free_data(t_data *data)
+void	free_data(t_data *data)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (data->map)
@@ -18,9 +30,9 @@ void free_data(t_data *data)
 	free(data);
 }
 
-void free_map(char **map)
+void	free_map(char **map)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (map)
@@ -33,13 +45,23 @@ void free_map(char **map)
 		free(map);
 	}
 }
-void free_all_and_print_error(t_data *data, char **map, char *line)
+
+void	free_all_and_print_error(t_data *data, char **map, char *line)
 {
-	if(line)
+	if (line)
 		free(line);
 	if (map)
 		free_map(map);
-	if(data)
+	if (data)
 		free_data(data);
-    exit(1);
+	exit (1);
+}
+
+bool	check_textures(char *line)
+{
+	if (!ft_strncmp("NO", line, 2) || !ft_strncmp("SO", line, 2)
+		|| !ft_strncmp("WE", line, 2) || !ft_strncmp("EA", line, 2)
+		|| !ft_strncmp("F", line, 1) || !ft_strncmp("C", line, 1))
+		return (true);
+	return (false);
 }

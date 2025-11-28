@@ -1,7 +1,7 @@
 NAME = cub3d
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g
 
 SRC = main.c \
 	  srcs/parsing.c \
@@ -13,6 +13,8 @@ SRC = main.c \
 	  srcs/raycast_utils.c \
 	  srcs/init_all.c \
 	  srcs/move_player.c \
+	  srcs/parse_textue.c\
+
 
 OBJ = $(SRC:.c=.o)
 
