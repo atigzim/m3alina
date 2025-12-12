@@ -1,8 +1,8 @@
 #ifndef CUB_3D_3D
 # define CUB_3D_3D
 
-// # include <mlx.h> 
-#include "../minilibx-linux/mlx.h"
+# include <mlx.h> 
+// #include "../minilibx-linux/mlx.h"
 # include "../libft/libft.h"
 # include <math.h>
 # include <ctype.h>
@@ -15,9 +15,9 @@
 # include <string.h>
 # include <unistd.h>
 
-# define TILE_SIZE 32 // Makes map fit in window
-# define WIN_WIDTH 1200
-# define WIN_HEIGHT 800
+# define TILE_SIZE 64 // Makes map fit in window
+# define WIN_WIDTH 1000
+# define WIN_HEIGHT 600
 # define CLOSE 17
 # define PI 3.1415926535
 # define TWO_PI 6.283185307 // represents a full 360° circle in radians.
@@ -91,6 +91,7 @@ typedef struct s_ray
     double delta_dist_y;
     double dx;
     double dy;
+    int hit;
     int is_vertical_hit;   // 1 = vertical wall, 2 = horizontal wall
 } t_ray;
 
@@ -130,6 +131,10 @@ typedef struct s_data
     void *window;
     t_image buffer;
     t_textures textures;
+    t_image tex_no;
+    t_image tex_so;
+    t_image tex_we;
+    t_image tex_ea;
     t_player player;
     t_ray    rays[WIN_WIDTH];
     t_walls wall;
@@ -161,12 +166,18 @@ void check_valid_character(char c, t_data *data, char **map);
 void player_position(t_data *data, int i, int j);
 void	pars_textures(char *line, t_data *data, int *offset);
 void	one_line_map(t_data *data, int fd, char *line);
-
 void my_mlx_pixel_put(t_image *img, int x, int y, int color);
+bool xpm_valid(char *path_file);
+void parse_xpm(t_data* data);
+void pars_main(t_data *data, char *filename);
+void check_map_valid(char **map, t_data *data, int i, int j);
 //raycasting
 void grid_lines(t_data *data);
 void draw_block(t_image *img, int x, int y, int cool);
 void draw_all(t_data *data);
+int game_loop(t_data *data);
+int key_press(int keycode, void *param);
+int	sed(void *param);
 //cast rays
 void cast_one_ray(t_data *data, int ray_index);
 void cast_all_rays(t_data *data);
@@ -183,5 +194,13 @@ void turn_right(t_data *data);
 //free all
 void free_data(t_data *data);
 void free_map(char **map);
-
+void free_mlx(t_data *data);
+//textures
+int load_texture(t_data *data, t_image *tex, char *path);
+int texture_get_pixel(t_image *tex, int x, int y);
+int set_textures(t_data *data);
+t_image *texture_decide(t_data *data, t_ray *ray);
+void draw_wall(t_data *data, int ray_index, double wall_top, double wall_bottom);
+void put_pixel_to_buffer(t_image *buffer, int x, int y, int color);
+void calculate_wall_dimensions(t_data *data, int ray_index);
 #endif

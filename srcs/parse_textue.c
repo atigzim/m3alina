@@ -6,23 +6,26 @@
 /*   By: atigzim <atigzim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 14:42:11 by atigzim           #+#    #+#             */
-/*   Updated: 2025/11/28 14:55:29 by atigzim          ###   ########.fr       */
+/*   Updated: 2025/12/12 01:07:44 by atigzim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub_3d.h"
 
-bool parse_color_textue(char *line)
+bool	parse_color_textue(char *line)
 {
-	int i;
-	int flag;
+	int	i;
+	int	flag;
 
 	i = 0;
 	flag = 0;
 	while (line[i])
 	{
-		if(line[i] == ',')
+		if (line[i] == ',')
 			flag++;
+		if (!ft_isdigit(line[i]) && line[i] != ','
+			&& !ft_isspace(line[i]) && i != 0)
+			return (false);
 		i++;
 	}
 	if (flag != 2)
@@ -30,9 +33,9 @@ bool parse_color_textue(char *line)
 	return (true);
 }
 
-int parse_color_to_int(char *line, t_data *data, char *original_line)
+int	parse_color_to_int(char *line, t_data *data, char *original_line)
 {
-    int i ;
+	int	i;
 
 	i = 0;
 	if (!parse_color_textue(line))
@@ -40,34 +43,35 @@ int parse_color_to_int(char *line, t_data *data, char *original_line)
 		printf("Error\nInvalid color format\n");
 		free_all_and_print_error(data, NULL, original_line);
 	}
-    if (*line == 'C' || *line == 'F')
-        line++;
-    line = skip_spacess(line);
-    data->f_c_color.r = ft_atoi(line);
-    if (data->f_c_color.r < 0 || data->f_c_color.r > 255)
+	if (*line == 'C' || *line == 'F')
+		line++;
+	line = skip_spacess(line);
+	data->f_c_color.r = ft_atoi(line);
+	if (data->f_c_color.r < 0 || data->f_c_color.r > 255)
 	{
 		printf("Error\nInvalid color format\n");
 		free_all_and_print_error(data, NULL, original_line);
 	}
-    while (line[i] && line[i] != ',')
-        i++;
-    i++; 
-    data->f_c_color.g = ft_atoi(line + i);
-    if (data->f_c_color.g < 0 || data->f_c_color.g > 255)
+	while (line[i] && line[i] != ',')
+		i++;
+	i++;
+	data->f_c_color.g = ft_atoi(line + i);
+	if (data->f_c_color.g < 0 || data->f_c_color.g > 255)
 	{
 		printf("Error\nInvalid color format\n");
 		free_all_and_print_error(data, NULL, original_line);
 	}
-    while (line[i] && line[i] != ',')
-        i++;
-    i++;
-    data->f_c_color.b = ft_atoi(line + i);
-    if (data->f_c_color.b < 0 || data->f_c_color.b > 255)
+	while (line[i] && line[i] != ',')
+		i++;
+	i++;
+	data->f_c_color.b = ft_atoi(line + i);
+	if (data->f_c_color.b < 0 || data->f_c_color.b > 255)
 	{
 		printf("Error\nInvalid color format\n");
 		free_all_and_print_error(data, NULL, original_line);
 	}
-    return (data->f_c_color.r << 16 | data->f_c_color.g << 8 | data->f_c_color.b);
+	return (data->f_c_color.r << 16
+		| data->f_c_color.g << 8 | data->f_c_color.b);
 }
 
 int	duplicate_path(char *position, t_data *data)
@@ -106,4 +110,3 @@ char	*find_path(char *line, char *position, t_data *data,
 	strip_newline(line);
 	return (line);
 }
-

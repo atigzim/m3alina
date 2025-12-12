@@ -6,7 +6,7 @@
 /*   By: atigzim <atigzim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 12:24:33 by atigzim           #+#    #+#             */
-/*   Updated: 2025/11/28 16:14:10 by atigzim          ###   ########.fr       */
+/*   Updated: 2025/12/11 20:46:32 by atigzim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	map_valid(char **map, t_data *data)
 		j = 0;
 		while (map[i][j])
 		{
-			check_valid_character(map[i][j], data, map);
+			check_map_valid(map, data, i, j);
 			if (map[i][j] == 'N' || map[i][j] == 'S' || map[i][j] == 'E'
 				|| map[i][j] == 'W')
 			{

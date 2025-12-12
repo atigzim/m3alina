@@ -6,7 +6,7 @@
 /*   By: atigzim <atigzim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 14:19:20 by atigzim           #+#    #+#             */
-/*   Updated: 2025/11/28 16:17:25 by atigzim          ###   ########.fr       */
+/*   Updated: 2025/12/12 00:58:23 by atigzim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ void	player_position(t_data *data, int i, int j)
 	data->player_dir = data->map[i][j];
 }
 
-
 bool	search_map(char *line)
 {
 	int	i;
@@ -56,9 +55,10 @@ bool	search_map(char *line)
 	}
 	return (false);
 }
+
 void	one_line_map(t_data *data, int fd, char *line)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	data->map = malloc(sizeof(char *) * (data->map_height + 1));
@@ -69,11 +69,16 @@ void	one_line_map(t_data *data, int fd, char *line)
 	}
 	while (line && i < data->map_height && search_map(line))
 	{
-	data->map[i] = ft_strdup(line);
+		data->map[i] = ft_strdup(line);
 		data->map[i] = strip_newline(data->map[i]);
 		free(line);
 		line = get_next_line(fd);
 		i++;
+	}
+	if (line)
+	{
+		printf("Error\nToo many map lines\n");
+		free_all_and_print_error(data, NULL, line);
 	}
 	data->map[i] = NULL;
 }
@@ -96,8 +101,5 @@ void	add_map_line(t_data *data, char *filename)
 		line = get_next_line(fd);
 	}
 	one_line_map(data, fd, line);
-	// free(line);
 	close(fd);
-		for(int i = 0; data->map[i]; i++)
-		printf("Map line %d: %s\n", i, data->map[i]); // Debug line --- IGNORE ---
 }

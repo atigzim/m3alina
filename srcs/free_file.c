@@ -6,17 +6,29 @@
 /*   By: atigzim <atigzim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 12:08:20 by atigzim           #+#    #+#             */
-/*   Updated: 2025/11/28 12:28:51 by atigzim          ###   ########.fr       */
+/*   Updated: 2025/12/11 18:44:05 by atigzim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub_3d.h"
 
+void	free_texture(t_data *data)
+{
+	if (data->mlx)
+	{
+		if (data->tex_no.img_ptr)
+			mlx_destroy_image(data->mlx, data->tex_no.img_ptr);
+		if (data->tex_so.img_ptr)
+			mlx_destroy_image(data->mlx, data->tex_so.img_ptr);
+		if (data->tex_we.img_ptr)
+			mlx_destroy_image(data->mlx, data->tex_we.img_ptr);
+		if (data->tex_ea.img_ptr)
+			mlx_destroy_image(data->mlx, data->tex_ea.img_ptr);
+	}
+}
+
 void	free_data(t_data *data)
 {
-	int	i;
-
-	i = 0;
 	if (data->map)
 		free_map(data->map);
 	if (data->textures.north)
@@ -27,6 +39,7 @@ void	free_data(t_data *data)
 		free(data->textures.west);
 	if (data->textures.east)
 		free(data->textures.east);
+	free_texture(data);
 	free(data);
 }
 
