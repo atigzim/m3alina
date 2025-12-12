@@ -6,7 +6,7 @@
 /*   By: atigzim <atigzim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 16:01:30 by atigzim           #+#    #+#             */
-/*   Updated: 2025/04/21 18:04:29 by atigzim          ###   ########.fr       */
+/*   Updated: 2025/12/13 00:21:59 by atigzim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	*ft_memmove(void *dest, const void *src, size_t n)
 	unsigned char	*s;
 	size_t			i;
 
-	if(!src)
+	if (!src)
 		return (NULL);
 	d = (unsigned char *)dest;
 	s = (unsigned char *)src;

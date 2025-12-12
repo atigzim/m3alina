@@ -6,7 +6,7 @@
 /*   By: atigzim <atigzim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 01:24:04 by atigzim           #+#    #+#             */
-/*   Updated: 2025/04/21 17:53:52 by atigzim          ###   ########.fr       */
+/*   Updated: 2025/12/13 00:17:29 by atigzim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	ft_bzero(void *s, size_t n)
 	size_t			i;
 	unsigned char	*str;
 
-	if(!s)
+	if (!s)
 		return ;
 	i = 0;
 	str = (unsigned char *)s;

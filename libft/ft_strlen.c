@@ -6,7 +6,7 @@
 /*   By: atigzim <atigzim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 23:51:37 by atigzim           #+#    #+#             */
-/*   Updated: 2025/04/21 20:36:25 by atigzim          ###   ########.fr       */
+/*   Updated: 2025/12/13 00:23:23 by atigzim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 size_t	ft_strlen(const char *s)
 {
 	size_t	i;
-	
-	if(!s)
+
+	if (!s)
 		return (0);
 	i = 0;
 	while (s[i])

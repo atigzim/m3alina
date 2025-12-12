@@ -6,7 +6,7 @@
 /*   By: atigzim <atigzim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 19:01:31 by atigzim           #+#    #+#             */
-/*   Updated: 2025/04/21 18:02:13 by atigzim          ###   ########.fr       */
+/*   Updated: 2025/12/13 00:19:27 by atigzim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	*ft_memcpy(void *dest, const void *src, size_t n)
 	const unsigned char	*s;
 	size_t				i;
 
-	if(!src)
+	if (!src)
 		return (NULL);
 	if (dest == src)
 		return ((char *)src);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abhmidat <abhmidat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atigzim <atigzim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 23:03:54 by atigzim           #+#    #+#             */
-/*   Updated: 2025/11/18 12:55:46 by abhmidat         ###   ########.fr       */
+/*   Updated: 2025/12/13 00:25:23 by atigzim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # include <stdlib.h>
 # include <string.h>
 # include <unistd.h>
-#include <stdint.h>
+# include <stdint.h>
 
 int					ft_isalpha(int c);
 int					ft_isdigit(int c);
@@ -77,6 +77,6 @@ void				ft_lstdelone(t_list *lst, void (*del)(void *));
 void				ft_lstclear(t_list **lst, void (*del)(void *));
 
 //gnl
-char	*get_next_line(int fd);
+char				*get_next_line(int fd);
 
 #endif

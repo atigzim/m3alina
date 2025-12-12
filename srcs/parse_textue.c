@@ -6,7 +6,7 @@
 /*   By: atigzim <atigzim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 14:42:11 by atigzim           #+#    #+#             */
-/*   Updated: 2025/12/12 01:07:44 by atigzim          ###   ########.fr       */
+/*   Updated: 2025/12/13 00:50:12 by atigzim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,8 @@ bool	parse_color_textue(char *line)
 	return (true);
 }
 
-int	parse_color_to_int(char *line, t_data *data, char *original_line)
+char	*skip_frst_color(t_data *data, char *line, char *original_line)
 {
-	int	i;
-
-	i = 0;
 	if (!parse_color_textue(line))
 	{
 		printf("Error\nInvalid color format\n");
@@ -52,6 +49,15 @@ int	parse_color_to_int(char *line, t_data *data, char *original_line)
 		printf("Error\nInvalid color format\n");
 		free_all_and_print_error(data, NULL, original_line);
 	}
+	return (line);
+}
+
+int	parse_color_to_int(char *line, t_data *data, char *original_line)
+{
+	int	i;
+
+	i = 0;
+	line = skip_frst_color(data, line, original_line);
 	while (line[i] && line[i] != ',')
 		i++;
 	i++;

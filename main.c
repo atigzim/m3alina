@@ -6,13 +6,13 @@
 /*   By: atigzim <atigzim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 12:08:24 by atigzim           #+#    #+#             */
-/*   Updated: 2025/12/12 00:48:59 by atigzim          ###   ########.fr       */
+/*   Updated: 2025/12/13 00:16:50 by atigzim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "include/cub_3d.h"
 
-void free_mlx(t_data *data)
+void	free_mlx(t_data *data)
 {
 	if (data->mlx)
 	{
@@ -42,7 +42,7 @@ int	key_press(int keycode, void *param)
 	if (keycode == ESC)
 	{
 		free_mlx(data);
-		if(data)
+		if (data)
 			free_data(data);
 		exit(0);
 	}
@@ -57,12 +57,11 @@ int	sed(void *param)
 
 	data = (t_data *)param;
 	free_mlx(data);
-	if(data)
+	if (data)
 		free_data(data);
 	exit(0);
 	return (0);
 }
-
 
 int	game_loop(t_data *data)
 {

@@ -6,7 +6,7 @@
 /*   By: atigzim <atigzim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 13:02:42 by abhmidat          #+#    #+#             */
-/*   Updated: 2025/12/12 01:17:08 by atigzim          ###   ########.fr       */
+/*   Updated: 2025/12/13 00:43:46 by atigzim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	load_texture(t_data *data, t_image *tex, char *path)
 	{
 		write(2, "Error\nFailed to load texture\n", 30);
 		free_mlx(data);
-		if(data)
+		if (data)
 			free_data(data);
 		return (1);
 	}
@@ -44,7 +44,7 @@ int	load_texture(t_data *data, t_image *tex, char *path)
 		mlx_destroy_image(data->mlx, tex->img_ptr);
 		tex->img_ptr = NULL;
 		free_mlx(data);
-		if(data)
+		if (data)
 			free_data(data);
 		return (1);
 	}

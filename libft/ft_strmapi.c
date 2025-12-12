@@ -6,7 +6,7 @@
 /*   By: atigzim <atigzim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 13:48:37 by atigzim           #+#    #+#             */
-/*   Updated: 2024/11/21 01:21:44 by atigzim          ###   ########.fr       */
+/*   Updated: 2025/12/13 00:25:54 by atigzim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ char	myfunc(unsigned int i, char c)
 	}
 	return (c);
 }
+
 char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
 {
 	char			*p;
@@ -42,11 +43,3 @@ char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
 	p[i] = '\0';
 	return (p);
 }
-// int main()
-// {
-// 	char (*f)(unsigned int, char)
-// 	{
-// 		char 
-// 	}
-// 	printf("%s",ft_strmapi("abdo",myfunc));
-// }

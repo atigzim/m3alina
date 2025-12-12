@@ -6,7 +6,7 @@
 /*   By: atigzim <atigzim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 13:04:35 by atigzim           #+#    #+#             */
-/*   Updated: 2025/04/21 18:07:11 by atigzim          ###   ########.fr       */
+/*   Updated: 2025/12/13 00:23:05 by atigzim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ char	*ft_strdup(const char *s)
 	char	*d;
 	size_t	i;
 
-	if(!s)
+	if (!s)
 		return (NULL);
 	i = 0;
 	d = (char *)malloc(sizeof(char) * len((char *)s) + 1);
